@@ -1,4 +1,11 @@
 const tmi = require('tmi.js');
+const axios = require('axios')
+
+const conf = require('./conf/conf')
+
+const global = require('./global')
+const commandHandle = require('./commandHandle')
+const fetchCycle = require('./fetchCycle')
 
 // Define configuration options
 const opts = {
@@ -18,6 +25,13 @@ const opts = {
     ]
 };
 
+// const conf = {
+//     clientId: 'w2wiz22s7vnnxi03f7qyt3dbal8mlj',
+//     clientSecret: 'yr4x5rx7s591xvo91xk80z74l3bap3',
+//     redirectUri: 'http://localhost',
+//     scope: 'user:edit+user:read:email'
+// }
+
 // Create a client with our options
 const client = new tmi.client(opts);
 
@@ -28,6 +42,16 @@ client.on('connected', onConnectedHandler);
 // Connect to Twitch:
 client.connect();
 
+// Get access token for Twitch API
+axios.post(`https://id.twitch.tv/oauth2/token?client_id=${conf.clientId}&client_secret=${conf.clientSecret}&grant_type=client_credentials&scope=${conf.scope}`)
+    .then(res => {
+        if (res.status === 200) {
+            global.accessToken = res.data.access_token
+        } else {
+            console.error('Failed to retrieve access token!')
+        }
+    })
+
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
     if (self) { return; } // Ignore messages from the bot
@@ -35,17 +59,13 @@ function onMessageHandler (target, context, msg, self) {
     // Remove whitespace from chat message
     const commandName = msg.trim();
 
-    // If the command is known, let's execute it
-    if (commandName === '!dice') {
-        const num = rollDice();
-        client.say(target, `You rolled a ${num}`);
-        console.log(`* Executed ${commandName} command`);
-    } else {
-        console.log(`* Unknown command ${commandName}`);
-    }
+    commandHandle.handleCommand(client, target, context, commandName);
 }
 
 // Called every time the bot connects to Twitch chat
 function onConnectedHandler (addr, port) {
     console.log(`* Connected to ${addr}:${port}`);
 }
+
+
+setInterval(fetchCycle.update, 10000)

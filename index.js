@@ -1,11 +1,13 @@
 const tmi = require('tmi.js');
 const axios = require('axios')
+const mongoose = require('mongoose');
 
 const conf = require('./conf/conf')
 
 const global = require('./global')
 const commandHandle = require('./commandHandle')
 const fetchCycle = require('./fetchCycle')
+
 
 // Define configuration options
 const opts = {
@@ -25,12 +27,7 @@ const opts = {
     ]
 };
 
-// const conf = {
-//     clientId: 'w2wiz22s7vnnxi03f7qyt3dbal8mlj',
-//     clientSecret: 'yr4x5rx7s591xvo91xk80z74l3bap3',
-//     redirectUri: 'http://localhost',
-//     scope: 'user:edit+user:read:email'
-// }
+mongoose.connect('mongodb://localhost:27017/leeachaanbot', {useNewUrlParser: true});
 
 // Create a client with our options
 const client = new tmi.client(opts);
@@ -68,4 +65,4 @@ function onConnectedHandler (addr, port) {
 }
 
 
-setInterval(fetchCycle.update, 10000)
+setInterval(fetchCycle.update, 60000)

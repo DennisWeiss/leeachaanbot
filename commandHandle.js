@@ -41,6 +41,7 @@ function handleCommand(client, target, context, cmd) {
       break
     case '!leaderboard':
       leaderboard(client, target, context.username)
+      break
     case '!h':
       help(client, target, context.username)
       break

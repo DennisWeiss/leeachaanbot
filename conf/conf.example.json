@@ -9,5 +9,9 @@
     "nameSingular": "Dango",
     "namePlural": "Dangos",
     "pointsPerViewIteration": 1
-  }
+  },
+  "excludedUsers": [
+    "moobot",
+    "nightbot"
+  ]
 }

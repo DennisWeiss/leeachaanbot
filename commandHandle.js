@@ -3,12 +3,12 @@ const User = require('./model/User')
 const conf = require('./conf/conf')
 
 
-function help(target, username) {
+function help(client, target, username) {
   client.say(target, `@${username} Verfügbare Kommandos:\n\n
   !p, !dangos    Sagt dir wieviele Dangos du besitzt.`)
 }
 
-function dangos(traget, username) {
+function dangos(client, target, username) {
   User.findOne({name: username})
     .exec(function (err, user) {
       const points = user ? user.points : 0
@@ -20,16 +20,16 @@ function dangos(traget, username) {
 function handleCommand(client, target, context, cmd) {
   switch (cmd) {
     case '!p':
-      dangos(target, context.username)
+      dangos(client, target, context.username)
       break
     case '!dangos':
-      dangos(target, context.username)
+      dangos(client, target, context.username)
       break
     case '!h':
-      help(target, context.username)
+      help(client, target, context.username)
       break
     case '!help':
-      help(target, context.username)
+      help(client, target, context.username)
       break
   }
 }

@@ -5,7 +5,7 @@ const conf = require('./conf/conf')
 
 function help(target, username) {
   client.say(target, `@${username} Verfügbare Kommandos:\n\n
-  !p, !dangos    Sagt dir wie viele Dangos du besitzt.`)
+  !p, !dangos    Sagt dir wieviele Dangos du besitzt.`)
 }
 
 function dangos(traget, username) {

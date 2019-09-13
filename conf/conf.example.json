@@ -1,6 +1,6 @@
 {
-  "clientId": "w2wiz22s7vnnxi03f7qyt3dbal8mlj",
-  "clientSecret": "yr4x5rx7s591xvo91xk80z74l3bap3",
+  "clientId": "*************************",
+  "clientSecret": "************************",
   "redirectUri": "http://localhost",
   "scope": "user:edit+user:read:email"
 }

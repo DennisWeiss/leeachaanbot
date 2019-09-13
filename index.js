@@ -19,12 +19,11 @@ const opts = {
         reconnect: true
     },
     identity: {
-        username: 'leeachaanbot',
-        password: 'oauth:yjh2s6so13ixdf7sh317wrzuwq4g74'
+        username: conf.botUsername,
+        password: conf.botOAuthPassword
     },
-    channels: [
-        'leeachaan'
-    ]
+    channels: [conf.broadcasterChannelName]
+
 };
 
 mongoose.connect('mongodb://localhost:27017/leeachaanbot', {useNewUrlParser: true});

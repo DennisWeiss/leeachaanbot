@@ -30,7 +30,6 @@ const updateViewerPoints = function (viewer) {
 const update = function () {
   axios.get(`https://api.twitch.tv/helix/streams?user_login=${conf.broadcasterChannelName}`, {
     headers: {
-      Authorization: `OAuth ${global.accessToken}`,
       'Client-ID': conf.clientId
     }
   })

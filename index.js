@@ -23,7 +23,7 @@ const opts = {
         password: 'oauth:yjh2s6so13ixdf7sh317wrzuwq4g74'
     },
     channels: [
-        'dennisweiss'
+        'leeachaan'
     ]
 };
 

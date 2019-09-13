@@ -9,10 +9,10 @@ const updateViewerPoints = function(viewer) {
     User.findOne({'name': viewer})
         .exec(function (err, user) {
             if (user) {
-                User.findOneAndUpdate({'name': viewer}, {name: user.name, points: user.points + 10})
+                User.findOneAndUpdate({'name': viewer}, {name: user.name, points: user.points + 1})
                     .exec(function (err, user) {})
             } else {
-                const user = new User({name: viewer, points: 10})
+                const user = new User({name: viewer, points: 1})
                 user.save().then(() => {})
             }
         })

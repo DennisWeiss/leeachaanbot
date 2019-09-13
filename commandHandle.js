@@ -5,9 +5,10 @@ const User = require('./model/User')
 function handleCommand(client, target, context, cmd) {
     switch (cmd) {
         case '!p':
-            User.findOne({name: target.substr(1, client.length)})
+            User.findOne({name: context.username})
                 .exec(function (err, user) {
-                    client.say(target, `You got ${user ? user.points : 0} points.`)
+					const points = user ? user.points : 0
+                    client.say(target, `@${context.username} Du hast ${points} %{points == 1 ? 'Dango' : 'Dangos'}.`)
                 })
             break;
     }

@@ -4,8 +4,7 @@ const conf = require('./conf/conf')
 
 
 function help(client, target, username) {
-  client.say(target, `@${username} Verfügbare Kommandos:\n\n
-  !p, !dangos    Sagt dir wieviele Dangos du besitzt.`)
+  client.say(target, `@${username} Verfügbare Kommandos: !p, !dangos: Sagt dir wieviele Dangos du besitzt.`)
 }
 
 function dangos(client, target, username) {
@@ -17,6 +16,20 @@ function dangos(client, target, username) {
     })
 }
 
+function leaderboard(client, target, username) {
+  User.find({})
+    .exec((err, users) => {
+      const sortedUsers = [...users].sort((a, b) => a.points - b.points)
+      let msg = `@${username} `
+      for (let i = 0; i < Math.min(3, sortedUsers.length); i++) {
+        msg += `${i + 1}. ${sortedUsers[i].name} ${formatPoints(sortedUsers[i].points)} `
+      }
+      client.say(target, msg)
+    })
+}
+
+const formatPoints = points => `${points} ${points === 1 ? conf.currency.nameSingular : conf.currency.namePlural}`
+
 function handleCommand(client, target, context, cmd) {
   switch (cmd) {
     case '!p':
@@ -25,6 +38,8 @@ function handleCommand(client, target, context, cmd) {
     case '!dangos':
       dangos(client, target, context.username)
       break
+    case '!leaderboard':
+      leaderboard(client, target, context.username)
     case '!h':
       help(client, target, context.username)
       break

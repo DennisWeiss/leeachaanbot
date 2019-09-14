@@ -8,11 +8,13 @@ function help(client, target, username) {
   ${conf.currency.namePlural} du besitzt. !leaderboard: Schau wer die meisten ${conf.currency.namePlural} besitzt.`)
 }
 
-function dangos(client, target, userId) {
+function dangos(client, target, userId, username) {
+	console.log(userId)
   User.findOne({userId})
     .exec(function (err, user) {
+		console.log(user)
       const points = user ? user.points : 0
-      client.say(target, `@${user.name} Du hast ${points} ${points === 1 ?
+      client.say(target, `@${username} Du hast ${points} ${points === 1 ?
         conf.currency.nameSingular : conf.currency.namePlural}.`)
     })
 }
@@ -44,10 +46,10 @@ const formatPoints = points => `${points} ${points === 1 ? conf.currency.nameSin
 function handleCommand(client, target, context, cmd) {
   switch (cmd) {
     case '!p':
-      dangos(client, target, context['user-id'])
+      dangos(client, target, context['user-id'], context.username)
       break
     case '!dangos':
-      dangos(client, target, context['user-id'])
+      dangos(client, target, context['user-id'], context.username)
       break
     case '!leaderboard':
       leaderboard(client, target, context['user-id'], context.username)

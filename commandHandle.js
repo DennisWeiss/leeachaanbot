@@ -17,9 +17,7 @@ function dangos(client, target, username) {
     })
 }
 
-function appendLeaderboardMessagePart(msg, index, user) {
-  msg += `${index + 1}. ${user.name} ${formatPoints(user.points)} `
-}
+const leaderboardMessagePart = (msg, index, user) => `${index + 1}. ${user.name} ${formatPoints(user.points)} `
 
 function leaderboard(client, target, username) {
   User.find({})
@@ -27,12 +25,12 @@ function leaderboard(client, target, username) {
       const sortedUsers = [...users].sort((a, b) => b.points - a.points)
       let msg = `@${username} `
       for (let i = 0; i < Math.min(3, sortedUsers.length); i++) {
-        appendLeaderboardMessagePart(msg, i, sortedUsers[i])
+        msg += leaderboardMessagePart(msg, i, sortedUsers[i])
       }
       for (let i = 0; i < sortedUsers.length; i++) {
         if (sortedUsers[i].name === username) {
           if (i > 2) {
-            appendLeaderboardMessagePart(msg, i, sortedUsers[i])
+            msg += leaderboardMessagePart(msg, i, sortedUsers[i])
           }
           break
         }

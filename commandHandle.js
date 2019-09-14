@@ -17,13 +17,25 @@ function dangos(client, target, username) {
     })
 }
 
+function appendLeaderboardMessagePart(msg, index, user) {
+  msg += `${index + 1}. ${user.name} ${formatPoints(user.points)} `
+}
+
 function leaderboard(client, target, username) {
   User.find({})
     .exec((err, users) => {
       const sortedUsers = [...users].sort((a, b) => b.points - a.points)
       let msg = `@${username} `
       for (let i = 0; i < Math.min(3, sortedUsers.length); i++) {
-        msg += `${i + 1}. ${sortedUsers[i].name} ${formatPoints(sortedUsers[i].points)} `
+        appendLeaderboardMessagePart(msg, i, sortedUsers[i])
+      }
+      for (let i = 0; i < sortedUsers.length; i++) {
+        if (sortedUsers[i].name === username) {
+          if (i > 2) {
+            appendLeaderboardMessagePart(msg, i, sortedUsers[i])
+          }
+          break
+        }
       }
       client.say(target, msg)
     })

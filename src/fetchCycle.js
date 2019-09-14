@@ -34,7 +34,7 @@ const update = function () {
     }
   })
     .then(res => {
-      if (res.data && res.data.data && res.data.data.length > 0 || true) {
+      if (res.data && res.data.data && res.data.data.length > 0) {
         // axios.get(`https://api.twitch.tv/helix/subscriptions?broadcaster_id=${'461693554'}`, {
         //   headers: {
         //     'Authorization': `Bearer ${global.accessToken}`

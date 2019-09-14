@@ -1,6 +1,6 @@
-const User = require('./model/User')
+const User = require('./src/model/User')
 const axios = require('axios')
-const conf = require('./conf/conf')
+const conf = require('./src/conf/conf')
 const mongoose = require('mongoose')
 
 mongoose.connect('mongodb://localhost:27017/leeachaanbot', {useNewUrlParser: true});

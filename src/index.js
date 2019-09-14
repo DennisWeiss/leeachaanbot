@@ -22,7 +22,7 @@ const opts = {
         username: conf.botUsername,
         password: conf.botOAuthPassword
     },
-    channels: [conf.broadcasterChannelName]
+  channels: [/*conf.broadcasterChannelName*/ 'dennisweiss']
 
 };
 
@@ -39,14 +39,26 @@ client.on('connected', onConnectedHandler);
 client.connect();
 
 // Get access token for Twitch API
-axios.post(`https://id.twitch.tv/oauth2/token?client_id=${conf.clientId}&client_secret=${conf.clientSecret}&grant_type=client_credentials&scope=${conf.scope}`)
+axios.post(`https://id.twitch.tv/oauth2/token?client_id=${conf.clientId}&client_secret=${conf.clientSecret}&grant_type=authorization_code&redirect_uri=http://localhost&code=${conf.authorizationCode}`)
     .then(res => {
         if (res.status === 200) {
             global.accessToken = res.data.access_token
         } else {
             console.error('Failed to retrieve access token!')
         }
+      console.log('accessToken', global.accessToken)
     })
+  .catch(console.error)
+
+axios.get(`https://api.twitch.tv/helix/users?login=${conf.broadcasterChannelName}`, {
+  headers: {
+    'Client-ID': conf.clientId
+  }
+}).then(res => {
+  if (res.data && res.data.data && res.data.data.length > 0) {
+    global.broadcasterId = res.data.data[0].id
+  }
+})
 
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
@@ -64,4 +76,4 @@ function onConnectedHandler (addr, port) {
 }
 
 
-setInterval(fetchCycle.update, 60000)
+setInterval(fetchCycle.update, 10000)

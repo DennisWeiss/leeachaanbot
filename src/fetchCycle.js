@@ -34,20 +34,27 @@ const update = function () {
     }
   })
     .then(res => {
-      if (res.data && res.data.data && res.data.data.length > 0) {
-        axios.get(`http://tmi.twitch.tv/group/user/${conf.broadcasterChannelName}/chatters`)
-          .then(res => res.data && res.data.chatters &&
-            [...res.data.chatters.viewers, ...res.data.chatters.moderators].forEach(username => {
-              axios.get(`https://api.twitch.tv/helix/users?login=${username}`, {
-                headers: {
-                  'Client-ID': conf.clientId
-                }
-              }).then(res => {
-                if (res.data && res.data.data && res.data.data.length > 0) {
-                  updateViewerPoints(res.data.data[0].id, username)
-                }
-              })
-            }))
+      if (res.data && res.data.data && res.data.data.length > 0 || true) {
+        axios.get(`https://api.twitch.tv/helix/subscriptions?broadcaster_id=${'461693554'}`, {
+          headers: {
+            'Authorization': `Bearer ${global.accessToken}`
+          }
+        }).then(res => {
+          console.log(res.data)
+          axios.get(`http://tmi.twitch.tv/group/user/${conf.broadcasterChannelName}/chatters`)
+            .then(res => res.data && res.data.chatters &&
+              [...res.data.chatters.viewers, ...res.data.chatters.moderators].forEach(username => {
+                axios.get(`https://api.twitch.tv/helix/users?login=${username}`, {
+                  headers: {
+                    'Client-ID': conf.clientId
+                  }
+                }).then(res => {
+                  if (res.data && res.data.data && res.data.data.length > 0) {
+                    updateViewerPoints(res.data.data[0].id, username)
+                  }
+                })
+              }))
+        })
       }
     })
 

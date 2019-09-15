@@ -14,6 +14,7 @@ const refreshToken = () => new Promise((resolve, reject) => {
         axios.post(`https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refersh_token=${security.refreshToken}&client_id=${conf.clientId}&client_secret=${conf.clientSecret}`)
           .then(res => {
             security.accessToken = res.data.access_token
+            global.accessToken = res.data.access_token
             security.refreshToken = res.data.refresh_token
             security.save().then(resolve)
           })

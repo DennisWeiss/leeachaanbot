@@ -1,14 +1,19 @@
 {
-  "clientId": "*************************",
+  "clientId": "**********************",
   "clientSecret": "************************",
-  "scope": "user:edit+user:read:email",
+  "accessToken": "*************************",
+  "refreshToken": "************************************",
+  "redirectUri": "http://localhost",
   "broadcasterChannelName": "leeachaan",
   "botUsername": "leeachaanbot",
   "botOAuthPassword": "oauth:**************************",
   "currency": {
     "nameSingular": "Dango",
     "namePlural": "Dangos",
-    "pointsPerViewIteration": 1
+    "iterationCycleInMs": 60000,
+    "pointsPerViewIteration": 1,
+    "followerMultiplier": 2,
+    "subscriberMultiplier": 10
   },
   "excludedUsers": [
     "moobot",

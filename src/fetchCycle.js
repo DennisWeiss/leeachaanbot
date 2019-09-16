@@ -33,7 +33,7 @@ const update = function () {
     }
   })
     .then(res => {
-      if (res.data && res.data.data && res.data.data.length > 0 || true) {
+      if (res.data && res.data.data && res.data.data.length > 0) {
         axios.get(`https://api.twitch.tv/helix/subscriptions?broadcaster_id=${global.broadcasterId}`, {
           headers: {
             'Authorization': `Bearer ${global.accessToken}`
@@ -43,7 +43,7 @@ const update = function () {
             global.refreshToken().then(() => update())
           }
           const subscribers = res.data && res.data.data ?
-            new Set(res.data.data.map(subscription => subscription.user_id)) : new Set()
+          new Set(res.data.data.map(subscription => subscription.user_id)) : new Set()
           axios.get(`https://api.twitch.tv/helix/users/follows?to_id=${global.broadcasterId}`, {
             headers: {
               'Client-ID': conf.clientId
@@ -73,6 +73,10 @@ const update = function () {
                   }))
             })
         })
+		.catch(err => {
+			console.log('error')
+		global.refreshToken().then(() => update())
+		})
       }
     })
 

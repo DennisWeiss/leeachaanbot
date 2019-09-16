@@ -5,7 +5,7 @@ const conf = require('./conf/conf')
 
 function help(client, target, username) {
   client.say(target, `@${username} Verfügbare Kommandos: !p, !dangos: Sagt dir wieviele 
-  ${conf.currency.namePlural} du besitzt. !leaderboard: Schau wer die meisten ${conf.currency.namePlural} besitzt.`)
+  ${conf.currency.namePlural} du besitzt. !leaderboard, !rekord: Schau wer die meisten ${conf.currency.namePlural} besitzt.`)
 }
 
 function dangos(client, target, userId, username) {
@@ -54,6 +54,12 @@ function handleCommand(client, target, context, cmd) {
     case '!leaderboard':
       leaderboard(client, target, context['user-id'], context.username)
       break
+	case '!rekord':
+	  leaderboard(client, target, context['user-id'], context.username)
+	  break
+	case '!epic':
+	  client.say(target, `@${context.username} Genauso wie auf Twitch: LeeaChaan`)
+	  break
     case '!h':
       help(client, target, context.username)
       break

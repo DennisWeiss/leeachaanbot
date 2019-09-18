@@ -81,10 +81,10 @@ const rouletteColorBet = (client, target, userId, username, points, bet) => {
         const won = bet === color
         let msg = `@${username} Es ist eine ${rouletteResult} (${translations[color]}). `
         if (won) {
-          user.points -= points
+          user.points += points
           msg += `Du hast also gewonnen! Du besitzt jetzt ${formatPoints(user.points)}. leeachLove`
         } else {
-          user.points += points
+          user.points -= points
           msg += `Du hast leider verloren! Du besitzt jetzt ${formatPoints(user.points)}.`
         }
         user.save().then(() => {})

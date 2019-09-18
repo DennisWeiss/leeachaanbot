@@ -102,6 +102,7 @@ const rouletteNumber = (client, target, userId, username, points, bet) => {
           client.say(target, `@${username} Du besitzt leider nicht genug ${conf.currency.namePlural}.`)
         } else {
           const rouletteResult = Math.floor(37 * Math.random())
+          const color = rouletteColor(rouletteResult);
           const won = bet === rouletteResult
           let msg = `@${username} Es ist eine ${rouletteResult} (${translations[color]}). `
           if (won) {

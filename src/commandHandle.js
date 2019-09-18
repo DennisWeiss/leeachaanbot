@@ -1,19 +1,19 @@
 const global = require('./global')
 const User = require('./model/User')
 const conf = require('./conf/conf')
+const roulette = require('./model/roulette')
+const translations = require('./conf/translations')
 
 
 function help(client, target, username) {
   client.say(target, `@${username} Verfügbare Kommandos: !p, !dangos: Sagt dir wieviele 
-  ${conf.currency.namePlural} du besitzt. !leaderboard, !rekord: Schau wer die meisten ${conf.currency.namePlural} besitzt. 
+  ${conf.currency.namePlural} du besitzt. !leaderboard, !rekord: Schau wer die meisten ${conf.currency.namePlural} gesammelt hat. 
   !gamble <1-100> Gib an wie viel % deiner ${conf.currency.namePlural} du mit einer 50/50 Chance vergamblen möchtest.`)
 }
 
 function dangos(client, target, userId, username) {
-	console.log(userId)
   User.findOne({userId})
     .exec(function (err, user) {
-		console.log(user)
       const points = user ? user.points : 0
       client.say(target, `@${username} Du hast ${points} ${points === 1 ?
         conf.currency.nameSingular : conf.currency.namePlural}.`)
@@ -58,6 +58,41 @@ const gamble = (client, target, userId, username, betFraction) => {
       })
 }
 
+const rouletteColor = number => {
+  const index = roulette.roulette.findIndex(n => n === number)
+  if (index === 0) {
+    return 'green'
+  }
+  if (index % 2 === 0) {
+    return 'black'
+  }
+  return 'red'
+}
+
+const rouletteColorBet = (client, target, userId, username, points, bet) => {
+
+  User.findOne({userId})
+    .exec((err, user) => {
+      if (points > user.points) {
+        client.say(target, `@${username} Du besitzt leider nicht genug ${conf.currency.namePlural}.`)
+      } else {
+        const rouletteResult = Math.floor(37 * Math.random())
+        const color = rouletteColor(rouletteResult);
+        const won = bet === color
+        let msg = `@${username} Es ist eine ${rouletteResult} (${translations[color]}). `
+        if (won) {
+          user.points -= points
+          msg += `Du hast also gewonnen! Du besitzt jetzt ${formatPoints(user.points)}. leeachLove`
+        } else {
+          user.points += points
+          msg += `Du hast leider verloren! Du besitzt jetzt ${formatPoints(user.points)}.`
+        }
+        user.save().then(() => {})
+        client.say(target, msg)
+      }
+    })
+}
+
 const formatPoints = points => `${points} ${points === 1 ? conf.currency.nameSingular : conf.currency.namePlural}`
 
 function handleCommand(client, target, context, cmd) {
@@ -70,7 +105,18 @@ function handleCommand(client, target, context, cmd) {
     } else {
       client.say(target, `@${context.username} !gamble <1-100>`)
     }
-  } else  {
+  } else if (cmd.startsWith('!roulette')) {
+    const parts = cmd.split(/\s+/)
+    if (parts.length === 3) {
+      const points = parseInt(parts[1])
+      const bet = parts[2];
+      if (points && ['green', 'black', 'red'].includes(bet)) {
+        rouletteColorBet(client, target, context['user-id'], context.username, points, bet)
+      }
+    } else {
+      client.say(target, `@${context.username} !roulette <${conf.currency.namePlural}> <bet>`)
+    }
+  } else {
     switch (cmd) {
       case '!p':
         dangos(client, target, context['user-id'], context.username)

@@ -70,25 +70,50 @@ const rouletteColor = number => {
 }
 
 const rouletteColorBet = (client, target, userId, username, points, bet) => {
-
   User.findOne({userId})
     .exec((err, user) => {
-      if (points > user.points) {
-        client.say(target, `@${username} Du besitzt leider nicht genug ${conf.currency.namePlural}.`)
-      } else {
-        const rouletteResult = Math.floor(37 * Math.random())
-        const color = rouletteColor(rouletteResult);
-        const won = bet === color
-        let msg = `@${username} Es ist eine ${rouletteResult} (${translations[color]}). `
-        if (won) {
-          user.points += points
-          msg += `Du hast also gewonnen! Du besitzt jetzt ${formatPoints(user.points)}. leeachLove`
+      if (user) {
+        if (points > user.points) {
+          client.say(target, `@${username} Du besitzt leider nicht genug ${conf.currency.namePlural}.`)
         } else {
-          user.points -= points
-          msg += `Du hast leider verloren! Du besitzt jetzt ${formatPoints(user.points)}.`
+          const rouletteResult = Math.floor(37 * Math.random())
+          const color = rouletteColor(rouletteResult);
+          const won = bet === color
+          let msg = `@${username} Es ist eine ${rouletteResult} (${translations[color]}). `
+          if (won) {
+            user.points += points
+            msg += `Du hast also gewonnen! Du besitzt jetzt ${formatPoints(user.points)}. leeachLove`
+          } else {
+            user.points -= points
+            msg += `Du hast leider verloren! Du besitzt jetzt ${formatPoints(user.points)}.`
+          }
+          user.save().then(() => {})
+          client.say(target, msg)
         }
-        user.save().then(() => {})
-        client.say(target, msg)
+      }
+    })
+}
+
+const rouletteNumber = (client, target, userId, username, points, bet) => {
+  User.findOne({userId})
+    .exec((err, user) => {
+      if (user) {
+        if (points > user.points) {
+          client.say(target, `@${username} Du besitzt leider nicht genug ${conf.currency.namePlural}.`)
+        } else {
+          const rouletteResult = Math.floor(37 * Math.random())
+          const won = bet === rouletteResult
+          let msg = `@${username} Es ist eine ${rouletteResult} (${translations[color]}). `
+          if (won) {
+            user.points += 35 * points
+            msg += `Du hast also gewonnen! Du besitzt jetzt ${formatPoints(user.points)}. leeachLove`
+          } else {
+            user.points -= points
+            msg += `Du hast leider verloren! Du besitzt jetzt ${formatPoints(user.points)}.`
+          }
+          user.save().then(() => {})
+          client.say(target, msg)
+        }
       }
     })
 }
@@ -110,11 +135,20 @@ function handleCommand(client, target, context, cmd) {
     if (parts.length === 3) {
       const points = parseInt(parts[1])
       const bet = parts[2];
-      if (points && ['green', 'black', 'red'].includes(bet)) {
-        rouletteColorBet(client, target, context['user-id'], context.username, points, bet)
+      if (points) {
+        if (['green', 'black', 'red'].includes(bet)) {
+          rouletteColorBet(client, target, context['user-id'], context.username, points, bet)
+        } else {
+          const betAsNumber = parseInt(bet)
+          if (betAsNumber >= 0 && betAsNumber <= 36) {
+            rouletteNumber(client, target, context['user-id'], context.username, points, betAsNumber)
+          } else {
+            client.say(target, `@${context.username} !roulette <${conf.currency.namePlural}> <0-36 oder Farbe>`)
+          }
+        }
       }
     } else {
-      client.say(target, `@${context.username} !roulette <${conf.currency.namePlural}> <bet>`)
+      client.say(target, `@${context.username} !roulette <${conf.currency.namePlural}> <0-36 oder Farbe>`)
     }
   } else {
     switch (cmd) {

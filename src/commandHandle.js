@@ -1,8 +1,10 @@
 const global = require('./global')
 const User = require('./model/User')
+const Security = require('./model/Security')
 const conf = require('./conf/conf')
 const roulette = require('./model/roulette')
 const translations = require('./conf/translations')
+const axios = require('axios')
 
 
 function help(client, target, username) {
@@ -119,6 +121,42 @@ const rouletteNumber = (client, target, userId, username, points, bet) => {
     })
 }
 
+function bitsLeaderboardMessagePart(i, res) {
+  return `${i + 1}. ${res.data.data[i]['user_name']} ${res.data.data[i].score} Bits `
+}
+
+const bitsLeaderboard = (client, target, userId, username) => {
+  Security.findOne({})
+    .exec((err, security) => {
+      axios.get('https://api.twitch.tv/helix/bits/leaderboard', {
+        headers: {
+          Authorization: `Bearer ${security.accessToken}`
+        }
+      })
+        .then(res => {
+          if (res.status === 401) {
+            global.refreshToken().then(() => bitsLeaderboard(client, target, userId, username))
+          }
+          if (res.data && res.data.data) {
+            let msg = `${username} `
+            for (let i = 0; i < Math.min(3, res.data.data.length); i++) {
+              msg += bitsLeaderboardMessagePart(i, res)
+            }
+            for (let i = 0; i < res.data.data.length; i++) {
+              if (res.data.data[i]['user_id'] === userId) {
+                if (i > 2) {
+                  msg += bitsLeaderboardMessagePart(i, res)
+                }
+                break
+              }
+            }
+            client.say(target, msg)
+          }
+        })
+        .catch(err => global.refreshToken().then(() => bitsLeaderboard(client, target, userId, username)))
+    })
+}
+
 const formatPoints = points => `${points} ${points === 1 ? conf.currency.nameSingular : conf.currency.namePlural}`
 
 function handleCommand(client, target, context, cmd) {
@@ -167,6 +205,9 @@ function handleCommand(client, target, context, cmd) {
         break
       case '!epic':
         client.say(target, `@${context.username} Genauso wie auf Twitch: LeeaChaan`)
+        break
+      case '!bits':
+        bitsLeaderboard(client, target, context['user-id'], context.username)
         break
       case '!h':
         help(client, target, context.username)

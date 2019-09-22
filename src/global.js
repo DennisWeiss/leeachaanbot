@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const Security = require('./model/Security')
 const axios = require('axios')
-const global = require('./global')
 
 const conf = require('./conf/conf')
 
@@ -17,7 +16,6 @@ const refreshToken = () => new Promise((resolve, reject) => {
           .then(res => {
 			console.log(res.data)
             security.accessToken = res.data.access_token
-            global.accessToken = res.data.access_token
             security.refreshToken = res.data.refresh_token
             security.save().then(resolve)
           })

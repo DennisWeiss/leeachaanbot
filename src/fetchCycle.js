@@ -3,6 +3,7 @@ const axios = require('axios')
 
 const conf = require('./conf/conf')
 const User = require('./model/User')
+const Security = require('./model/Security')
 
 
 const userExcluded = username => [conf.broadcasterChannelName, conf.botUsername, ...conf.excludedUsers].includes(username)
@@ -33,10 +34,12 @@ const update = function () {
     }
   })
     .then(res => {
-      if (res.data && res.data.data && res.data.data.length > 0) {
+		Security.findOne({})
+		.exec((err, security) => {
+			if (res.data && res.data.data && res.data.data.length > 0) {
         axios.get(`https://api.twitch.tv/helix/subscriptions?broadcaster_id=${global.broadcasterId}`, {
           headers: {
-            'Authorization': `Bearer ${global.accessToken}`
+            'Authorization': `Bearer ${security.accessToken}`
           }
         }).then(res => {
           if (res.status === 401) {
@@ -78,6 +81,7 @@ const update = function () {
 		global.refreshToken().then(() => update())
 		})
       }
+		})
     })
 
 }

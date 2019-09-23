@@ -22,7 +22,7 @@ function dangos(client, target, userId, username) {
     })
 }
 
-const leaderboardMessagePart = (msg, index, user) => `${index + 1}. ${user.name} ${formatPoints(user.points)} `
+const leaderboardMessagePart = (msg, index, user) => `${index + 1}. ${user.name} ${formatPoints(user.points)} - `
 
 function leaderboard(client, target, userId, username) {
   User.find({})
@@ -40,7 +40,7 @@ function leaderboard(client, target, userId, username) {
           break
         }
       }
-      client.say(target, msg)
+      client.say(target, msg.substr(0, msg.length - 3))
     })
 }
 
@@ -122,7 +122,7 @@ const rouletteNumber = (client, target, userId, username, points, bet) => {
 }
 
 function bitsLeaderboardMessagePart(i, res) {
-  return `${i + 1}. ${res.data.data[i]['user_name']} ${res.data.data[i].score} Bits `
+  return `${i + 1}. ${res.data.data[i]['user_name']} ${res.data.data[i].score} Bits - `
 }
 
 const bitsLeaderboard = (client, target, userId, username) => {
@@ -150,10 +150,26 @@ const bitsLeaderboard = (client, target, userId, username) => {
                 break
               }
             }
-            client.say(target, msg)
+            client.say(target, msg.substr(0, msg.length - 3))
           }
         })
         .catch(err => global.refreshToken().then(() => bitsLeaderboard(client, target, userId, username)))
+    })
+}
+
+const donationLeaderboard = (client, target, username) => {
+  axios.get(`https://www.tipeeestream.com/v2.0/users/${conf.broadcasterChannelName}/leaderboard?start=1970-01-01`)
+    .then(res => {
+      if (res.data && res.data.datas && res.data.datas.result) {
+        let msg = `@${username} `
+        for (let i = 0; i < 5; i++) {
+          const resultElement = res.data.datas.result[i.toString()]
+          if (resultElement) {
+            msg += `${i + 1}. ${resultElement.username} ${resultElement.amount} ${conf.donationCurrency} - `
+          }
+        }
+        client.say(target, msg.substr(0, msg.length - 3))
+      }
     })
 }
 
@@ -208,6 +224,9 @@ function handleCommand(client, target, context, cmd) {
         break
       case '!bits':
         bitsLeaderboard(client, target, context['user-id'], context.username)
+        break
+      case '!donations':
+        donationLeaderboard(client, target, context.username)
         break
       case '!h':
         help(client, target, context.username)

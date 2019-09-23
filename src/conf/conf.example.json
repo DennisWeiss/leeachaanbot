@@ -7,6 +7,7 @@
   "broadcasterChannelName": "leeachaan",
   "botUsername": "leeachaanbot",
   "botOAuthPassword": "oauth:**************************",
+  "donationCurrency": "€",
   "currency": {
     "nameSingular": "Dango",
     "namePlural": "Dangos",

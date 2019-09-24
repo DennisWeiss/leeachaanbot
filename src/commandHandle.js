@@ -173,6 +173,32 @@ const donationLeaderboard = (client, target, username) => {
     })
 }
 
+const give = (client, target, userId, username, usernameToGive, pointsToGive) => {
+  User.findOne({userId})
+    .exec((err, user) => {
+      if (user) {
+        if (pointsToGive > user.points) {
+          client.say(target, `@${username} Du hast leider nicht genug ${conf.currency.namePlural}.`)
+        } else {
+          User.findOne({name: usernameToGive})
+            .exec((err, userToGive) => {
+              if (userToGive) {
+                user.points -= pointsToGive
+                userToGive.points += pointsToGive
+                user.save().then(() => {
+                })
+                userToGive.save().then(() => {
+                })
+                client.say(target, `@${username} hat @${usernameToGive} ${formatPoints(pointsToGive)} gegeben.`)
+              } else {
+                client.say(target, `@${username} Ich konnte ${usernameToGive} leider nicht finden.`)
+              }
+            })
+        }
+      }
+    })
+}
+
 const formatPoints = points => `${points} ${points === 1 ? conf.currency.nameSingular : conf.currency.namePlural}`
 
 function handleCommand(client, target, context, cmd) {
@@ -204,6 +230,19 @@ function handleCommand(client, target, context, cmd) {
       }
     } else {
       client.say(target, `@${context.username} !roulette <${conf.currency.namePlural}> <0-36 oder Farbe>`)
+    }
+  } else if (cmd.startsWith('!give')) {
+    const parts = cmd.split(/\s+/)
+    if (parts.length !== 3) {
+      client.say(target, `@${context.username} !give <Username> <${conf.currency.namePlural}>`)
+    } else {
+      const usernameToGive = parts[1]
+      const pointsToGive = parseInt(parts[2])
+      if (usernameToGive && pointsToGive && pointsToGive > 0) {
+        give(client, target, context['user-id'], context.username, usernameToGive, pointsToGive)
+      } else {
+        client.say(target, `@${context.username} !give <Username> <${conf.currency.namePlural}>`)
+      }
     }
   } else {
     switch (cmd) {

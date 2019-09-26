@@ -168,6 +168,9 @@ function handleCommand(client, target, context, cmd) {
       case '!epic':
         client.say(target, `@${context.username} Genauso wie auf Twitch: LeeaChaan`)
         break
+      case '!dc':
+        client.say(target, 'https://discord.gg/cQPmZwT')
+        break
       case '!h':
         help(client, target, context.username)
         break

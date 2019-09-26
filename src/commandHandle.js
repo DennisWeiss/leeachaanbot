@@ -1,8 +1,10 @@
 const global = require('./global')
 const User = require('./model/User')
+const Security = require('./model/Security')
 const conf = require('./conf/conf')
 const roulette = require('./model/roulette')
 const translations = require('./conf/translations')
+const axios = require('axios')
 
 
 function help(client, target, username) {
@@ -20,7 +22,7 @@ function dangos(client, target, userId, username) {
     })
 }
 
-const leaderboardMessagePart = (msg, index, user) => `${index + 1}. ${user.name} ${formatPoints(user.points)} `
+const leaderboardMessagePart = (msg, index, user) => `${index + 1}. ${user.name} ${formatPoints(user.points)} - `
 
 function leaderboard(client, target, userId, username) {
   User.find({})
@@ -38,7 +40,7 @@ function leaderboard(client, target, userId, username) {
           break
         }
       }
-      client.say(target, msg)
+      client.say(target, msg.substr(0, msg.length - 3))
     })
 }
 
@@ -119,6 +121,84 @@ const rouletteNumber = (client, target, userId, username, points, bet) => {
     })
 }
 
+function bitsLeaderboardMessagePart(i, res) {
+  return `${i + 1}. ${res.data.data[i]['user_name']} ${res.data.data[i].score} Bits - `
+}
+
+const bitsLeaderboard = (client, target, userId, username) => {
+  Security.findOne({})
+    .exec((err, security) => {
+      axios.get('https://api.twitch.tv/helix/bits/leaderboard', {
+        headers: {
+          Authorization: `Bearer ${security.accessToken}`
+        }
+      })
+        .then(res => {
+          if (res.status === 401) {
+            global.refreshToken().then(() => bitsLeaderboard(client, target, userId, username))
+          }
+          if (res.data && res.data.data) {
+            let msg = `${username} `
+            for (let i = 0; i < Math.min(3, res.data.data.length); i++) {
+              msg += bitsLeaderboardMessagePart(i, res)
+            }
+            for (let i = 0; i < res.data.data.length; i++) {
+              if (res.data.data[i]['user_id'] === userId) {
+                if (i > 2) {
+                  msg += bitsLeaderboardMessagePart(i, res)
+                }
+                break
+              }
+            }
+            client.say(target, msg.substr(0, msg.length - 3))
+          }
+        })
+        .catch(err => global.refreshToken().then(() => bitsLeaderboard(client, target, userId, username)))
+    })
+}
+
+const donationLeaderboard = (client, target, username) => {
+  axios.get(`https://www.tipeeestream.com/v2.0/users/${conf.broadcasterChannelName}/leaderboard?start=1970-01-01`)
+    .then(res => {
+      if (res.data && res.data.datas && res.data.datas.result) {
+        let msg = `@${username} `
+        for (let i = 0; i < 5; i++) {
+          const resultElement = res.data.datas.result[i.toString()]
+          if (resultElement) {
+            msg += `${i + 1}. ${resultElement.username} ${resultElement.amount} ${conf.donationCurrency} - `
+          }
+        }
+        client.say(target, msg.substr(0, msg.length - 3))
+      }
+    })
+}
+
+const give = (client, target, userId, username, usernameToGive, pointsToGive) => {
+  User.findOne({userId})
+    .exec((err, user) => {
+      if (user) {
+        if (pointsToGive > user.points) {
+          client.say(target, `@${username} Du hast leider nicht genug ${conf.currency.namePlural}.`)
+        } else {
+          User.findOne({name: usernameToGive})
+            .exec((err, userToGive) => {
+              if (userToGive) {
+                user.points -= pointsToGive
+                userToGive.points += pointsToGive
+                user.save().then(() => {
+                })
+                userToGive.save().then(() => {
+                })
+                client.say(target, `@${username} hat @${usernameToGive} ${formatPoints(pointsToGive)} gegeben.`)
+              } else {
+                client.say(target, `@${username} Ich konnte ${usernameToGive} leider nicht finden.`)
+              }
+            })
+        }
+      }
+    })
+}
+
 const formatPoints = points => `${points} ${points === 1 ? conf.currency.nameSingular : conf.currency.namePlural}`
 
 function handleCommand(client, target, context, cmd) {
@@ -151,6 +231,19 @@ function handleCommand(client, target, context, cmd) {
     } else {
       client.say(target, `@${context.username} !roulette <${conf.currency.namePlural}> <0-36 oder Farbe>`)
     }
+  } else if (cmd.startsWith('!give')) {
+    const parts = cmd.split(/\s+/)
+    if (parts.length !== 3) {
+      client.say(target, `@${context.username} !give <Username> <${conf.currency.namePlural}>`)
+    } else {
+      const usernameToGive = parts[1]
+      const pointsToGive = parseInt(parts[2])
+      if (usernameToGive && pointsToGive && pointsToGive > 0) {
+        give(client, target, context['user-id'], context.username, usernameToGive, pointsToGive)
+      } else {
+        client.say(target, `@${context.username} !give <Username> <${conf.currency.namePlural}>`)
+      }
+    }
   } else {
     switch (cmd) {
       case '!p':
@@ -167,6 +260,12 @@ function handleCommand(client, target, context, cmd) {
         break
       case '!epic':
         client.say(target, `@${context.username} Genauso wie auf Twitch: LeeaChaan`)
+        break
+      case '!bits':
+        bitsLeaderboard(client, target, context['user-id'], context.username)
+        break
+      case '!donations':
+        donationLeaderboard(client, target, context.username)
         break
       case '!dc':
         client.say(target, 'https://discord.gg/cQPmZwT')

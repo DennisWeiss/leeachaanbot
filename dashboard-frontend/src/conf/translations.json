@@ -1,0 +1,20 @@
+{
+  "en": {
+    "locale": "en",
+    "Page":{
+      "LEADERBOARDS": "Leaderboards",
+      "POINTS_LEADERBOARD": "Points Leaderboard",
+      "DONATION_LEADERBOARD": "Donation Leaderboard",
+      "BITS_LEADERBOARD": "Bits Leaderboard"
+    }
+  },
+  "de": {
+    "locale": "de",
+    "Page":{
+      "LEADERBOARDS": "Bestenlisten",
+      "POINTS_LEADERBOARD": "Punkteliste",
+      "DONATION_LEADERBOARD": "Spendenliste",
+      "BITS_LEADERBOARD": "Bitsliste"
+    }
+  }
+}

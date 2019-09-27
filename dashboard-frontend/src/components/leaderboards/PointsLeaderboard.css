@@ -1,0 +1,9 @@
+.userEntry {
+    display: flex;
+    align-items: center;
+}
+
+.userEntry > a {
+    text-decoration: none;
+    color: black;
+}

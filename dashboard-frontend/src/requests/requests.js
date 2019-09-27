@@ -7,7 +7,9 @@ const fetchPointsLeadeboard = () => axios.get(`${conf.leaderboardEndpoint}/point
 const fetchDonationLeaderboard = broadcasterChannelName =>
   axios.get(`https://www.tipeeestream.com/v2.0/users/${broadcasterChannelName}/leaderboard?start=1970-01-01`)
 
+const fetchBitsLeaderboard = () => axios.get(`${conf.leaderboardEndpoint}/bits`)
+
 const fetchConfig = () => axios.get(`${conf.configEndpoint}/current`)
 
 
-export {fetchPointsLeadeboard, fetchDonationLeaderboard, fetchConfig}
+export {fetchPointsLeadeboard, fetchDonationLeaderboard, fetchBitsLeaderboard, fetchConfig}

@@ -18,6 +18,11 @@
       "TITLE": "Donation Leaderboard",
       "USER": "User",
       "DONATION_AMOUNT": "Donation amount"
+    },
+    "BitsLeaderboard": {
+      "TITLE": "Bits Leaderboard",
+      "USER": "User",
+      "BITS": "Bits"
     }
   },
   "de": {
@@ -39,6 +44,11 @@
       "TITLE": "Spendenliste",
       "USER": "Nutzer",
       "DONATION_AMOUNT": "Betrag"
+    },
+    "BitsLeaderboard": {
+      "TITLE": "Bitsliste",
+      "USER": "Nutzer",
+      "BITS": "Bits"
     }
   }
 }

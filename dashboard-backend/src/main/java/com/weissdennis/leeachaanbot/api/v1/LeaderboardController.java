@@ -1,5 +1,6 @@
 package com.weissdennis.leeachaanbot.api.v1;
 
+import com.weissdennis.leeachaanbot.integration.twitch.BitsLeaderboardEntry;
 import com.weissdennis.leeachaanbot.model.PointsLeaderboardEntry;
 import com.weissdennis.leeachaanbot.service.LeaderboardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,11 @@ public class LeaderboardController {
     @RequestMapping(path = "/points", method = RequestMethod.GET)
     public HttpEntity<List<PointsLeaderboardEntry>> getPointsLeaderboard() {
         return new ResponseEntity<>(leaderboardService.getPointsLeaderboard(), HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/bits", method = RequestMethod.GET)
+    public HttpEntity<List<BitsLeaderboardEntry>> getBitsLeaderboard() {
+        return new ResponseEntity<>(leaderboardService.getBitsLeaderboard(), HttpStatus.OK);
     }
 
 }

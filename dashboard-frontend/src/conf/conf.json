@@ -1,3 +1,4 @@
 {
-  "leaderboardEndpoint": "http://localhost:8080/leaderboard"
+  "leaderboardEndpoint": "http://localhost:8080/leaderboard",
+  "configEndpoint": "http://localhost:8080/config"
 }

@@ -13,6 +13,11 @@
     "PointsLeaderboard": {
       "TITLE": "Points Leaderboard",
       "USER": "User"
+    },
+    "DonationLeaderboard": {
+      "TITLE": "Donation Leaderboard",
+      "USER": "User",
+      "DONATION_AMOUNT": "Donation amount"
     }
   },
   "de": {
@@ -29,6 +34,11 @@
     "PointsLeaderboard": {
       "TITLE": "Punkteliste",
       "USER": "Nutzer"
+    },
+    "DonationLeaderboard": {
+      "TITLE": "Spendenliste",
+      "USER": "Nutzer",
+      "DONATION_AMOUNT": "Betrag"
     }
   }
 }

@@ -7,6 +7,8 @@ public class Users {
     private String userId;
 
     private String name;
+    private String displayName;
+    private String profilePictureUrl;
     private int points;
 
     public String getUserId() {
@@ -31,5 +33,21 @@ public class Users {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
     }
 }

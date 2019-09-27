@@ -7,15 +7,23 @@ import {
   ListItemText,
   Toolbar,
   Typography,
-  Divider, ListItemIcon
+  Divider,
+  ListItemIcon
 } from '@material-ui/core'
 import AppBar from '@material-ui/core/AppBar/AppBar'
 import {makeStyles, useTheme} from '@material-ui/core/styles'
 import {translate} from 'react-translate'
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
+import StarIcon from '@material-ui/icons/Star'
+import SettingsIcon from '@material-ui/icons/Settings'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faRobot} from '@fortawesome/free-solid-svg-icons'
+import PointsLeaderboard from './leaderboards/PointsLeaderboard'
+import DonationLeaderboard from './leaderboards/DonationLeaderboard'
+import BitsLeaderboard from './leaderboards/BitsLeaderboard'
 
 
-const drawerWidth = 200
+const drawerWidth = 240
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -52,7 +60,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Page = ({t}) => {
+const Page = ({t, selectPage, selectedPage}) => {
 
   const classes = useStyles()
   const theme = useTheme()
@@ -77,14 +85,15 @@ const Page = ({t}) => {
           <div>
             <div className={classes.toolbar}/>
             <List subheader={t('LEADERBOARDS')}>
-              <ListItem button key='test'>
+              <ListItem button key='POINTS_LEADERBOARD' onClick={() => selectPage('POINTS_LEADERBOARD')}>
+                <ListItemIcon className={classes.multiListItemIcon}><StarIcon/></ListItemIcon>
                 <ListItemText primary={t('POINTS_LEADERBOARD')}/>
               </ListItem>
-              <ListItem button key='test'>
+              <ListItem button key='DONATION_LEADERBOARD' onClick={() => selectPage('DONATION_LEADERBOARD')}>
                 <ListItemIcon className={classes.multiListItemIcon}><AttachMoneyIcon/></ListItemIcon>
                 <ListItemText primary={t('DONATION_LEADERBOARD')}/>
               </ListItem>
-              <ListItem button key='test'>
+              <ListItem button key='BITS_LEADERBOARD' onClick={() => selectPage('BITS_LEADERBOARD')}>
                 <ListItemIcon className={classes.multiListItemIcon}>
                   <svg className="tw-icon__svg" width="24px" height="24px" version="1.1" viewBox="0 0 20 20" x="0px"
                        y="0px">
@@ -95,34 +104,33 @@ const Page = ({t}) => {
                 <ListItemText primary={t('BITS_LEADERBOARD')}/>
               </ListItem>
             </List>
+            <Divider/>
+            <List subheader={t('ADMINISTRATION')}>
+              <ListItem button key='BOT_SETTINGS' onClick={() => selectPage('BOTS_SETTINGS')}>
+                <ListItemIcon className={classes.multiListItemIcon}>
+                  <span style={{marginRight: 5}}><FontAwesomeIcon icon={faRobot}/></span>
+                </ListItemIcon>
+                <ListItemText primary={t('BOT_SETTINGS')}/>
+              </ListItem>
+              <ListItem button key='CUSTOM_COMMANDS' onClick={() => selectPage('CUSTOM_COMMANDS')}>
+                <ListItemIcon className={classes.multiListItemIcon}><SettingsIcon/></ListItemIcon>
+                <ListItemText primary={t('CUSTOM_COMMANDS')}/>
+              </ListItem>
+            </List>
           </div>
         </Drawer>
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar}/>
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        {
+          selectedPage === 'POINTS_LEADERBOARD' && <PointsLeaderboard/>
+        }
+        {
+          selectedPage === 'DONATION_LEADERBOARD' && <DonationLeaderboard/>
+        }
+        {
+          selectedPage === 'BITS_LEADERBOARD' && <BitsLeaderboard/>
+        }
       </main>
     </div>
   )

@@ -5,7 +5,10 @@
       "LEADERBOARDS": "Leaderboards",
       "POINTS_LEADERBOARD": "Points Leaderboard",
       "DONATION_LEADERBOARD": "Donation Leaderboard",
-      "BITS_LEADERBOARD": "Bits Leaderboard"
+      "BITS_LEADERBOARD": "Bits Leaderboard",
+      "ADMINISTRATION": "Administration",
+      "BOT_SETTINGS": "Bot Settings",
+      "CUSTOM_COMMANDS": "Custom Commands"
     }
   },
   "de": {
@@ -14,7 +17,10 @@
       "LEADERBOARDS": "Bestenlisten",
       "POINTS_LEADERBOARD": "Punkteliste",
       "DONATION_LEADERBOARD": "Spendenliste",
-      "BITS_LEADERBOARD": "Bitsliste"
+      "BITS_LEADERBOARD": "Bitsliste",
+      "ADMINISTRATION": "Administrierung",
+      "BOT_SETTINGS": "Bot Einstellungen",
+      "CUSTOM_COMMANDS": "Benutzerdefinierte Befehle"
     }
   }
 }

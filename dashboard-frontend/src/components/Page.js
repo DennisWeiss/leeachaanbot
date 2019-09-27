@@ -34,12 +34,14 @@ const useStyles = makeStyles(theme => ({
       width: drawerWidth,
       flexShrink: 0,
     },
+    zIndex: 4
   },
   appBar: {
     marginLeft: drawerWidth,
     [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
+      width: '100%',
     },
+    zIndex: 5
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -50,6 +52,7 @@ const useStyles = makeStyles(theme => ({
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
+    padding: 10
   },
   content: {
     flexGrow: 1,
@@ -66,73 +69,76 @@ const Page = ({t, selectPage, selectedPage}) => {
   const theme = useTheme()
 
   return (
-    <div className={classes.root}>
-      <CssBaseline/>
+    <>
       <AppBar position='fixed' className={classes.appBar}>
         <Toolbar>
           <span style={{marginRight: 10}}><img src='leea-emote-128.png' width={32}/></span>
           <h3>LeeaChaanBot Dashboard</h3>
         </Toolbar>
       </AppBar>
-      <nav className={classes.drawer}>
-        <Drawer
-          open
-          variant='permanent'
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <div>
-            <div className={classes.toolbar}/>
-            <List subheader={t('LEADERBOARDS')}>
-              <ListItem button key='POINTS_LEADERBOARD' onClick={() => selectPage('POINTS_LEADERBOARD')}>
-                <ListItemIcon className={classes.multiListItemIcon}><StarIcon/></ListItemIcon>
-                <ListItemText primary={t('POINTS_LEADERBOARD')}/>
-              </ListItem>
-              <ListItem button key='DONATION_LEADERBOARD' onClick={() => selectPage('DONATION_LEADERBOARD')}>
-                <ListItemIcon className={classes.multiListItemIcon}><AttachMoneyIcon/></ListItemIcon>
-                <ListItemText primary={t('DONATION_LEADERBOARD')}/>
-              </ListItem>
-              <ListItem button key='BITS_LEADERBOARD' onClick={() => selectPage('BITS_LEADERBOARD')}>
-                <ListItemIcon className={classes.multiListItemIcon}>
-                  <svg className="tw-icon__svg" width="24px" height="24px" version="1.1" viewBox="0 0 20 20" x="0px"
-                       y="0px">
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                          d="M3 12l7-10 7 10-7 6-7-6zm2.678-.338L10 5.487l4.322 6.173-.85.728L10 11l-3.473 1.39-.849-.729z"></path>
-                  </svg>
-                </ListItemIcon>
-                <ListItemText primary={t('BITS_LEADERBOARD')}/>
-              </ListItem>
-            </List>
-            <Divider/>
-            <List subheader={t('ADMINISTRATION')}>
-              <ListItem button key='BOT_SETTINGS' onClick={() => selectPage('BOTS_SETTINGS')}>
-                <ListItemIcon className={classes.multiListItemIcon}>
-                  <span style={{marginRight: 5}}><FontAwesomeIcon icon={faRobot}/></span>
-                </ListItemIcon>
-                <ListItemText primary={t('BOT_SETTINGS')}/>
-              </ListItem>
-              <ListItem button key='CUSTOM_COMMANDS' onClick={() => selectPage('CUSTOM_COMMANDS')}>
-                <ListItemIcon className={classes.multiListItemIcon}><SettingsIcon/></ListItemIcon>
-                <ListItemText primary={t('CUSTOM_COMMANDS')}/>
-              </ListItem>
-            </List>
-          </div>
-        </Drawer>
-      </nav>
-      <main className={classes.content}>
-        <div className={classes.toolbar}/>
-        {
-          selectedPage === 'POINTS_LEADERBOARD' && <PointsLeaderboard/>
-        }
-        {
-          selectedPage === 'DONATION_LEADERBOARD' && <DonationLeaderboard/>
-        }
-        {
-          selectedPage === 'BITS_LEADERBOARD' && <BitsLeaderboard/>
-        }
-      </main>
-    </div>
+      <div className={classes.root}>
+        <CssBaseline/>
+
+        <nav className={classes.drawer}>
+          <Drawer
+            open
+            variant='permanent'
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            <div>
+              <div className={classes.toolbar}/>
+              <List subheader={t('LEADERBOARDS')}>
+                <ListItem button key='POINTS_LEADERBOARD' onClick={() => selectPage('POINTS_LEADERBOARD')}>
+                  <ListItemIcon className={classes.multiListItemIcon}><StarIcon/></ListItemIcon>
+                  <ListItemText primary={t('POINTS_LEADERBOARD')}/>
+                </ListItem>
+                <ListItem button key='DONATION_LEADERBOARD' onClick={() => selectPage('DONATION_LEADERBOARD')}>
+                  <ListItemIcon className={classes.multiListItemIcon}><AttachMoneyIcon/></ListItemIcon>
+                  <ListItemText primary={t('DONATION_LEADERBOARD')}/>
+                </ListItem>
+                <ListItem button key='BITS_LEADERBOARD' onClick={() => selectPage('BITS_LEADERBOARD')}>
+                  <ListItemIcon className={classes.multiListItemIcon}>
+                    <svg className="tw-icon__svg" width="24px" height="24px" version="1.1" viewBox="0 0 20 20" x="0px"
+                         y="0px">
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M3 12l7-10 7 10-7 6-7-6zm2.678-.338L10 5.487l4.322 6.173-.85.728L10 11l-3.473 1.39-.849-.729z"></path>
+                    </svg>
+                  </ListItemIcon>
+                  <ListItemText primary={t('BITS_LEADERBOARD')}/>
+                </ListItem>
+              </List>
+              <Divider/>
+              <List subheader={t('ADMINISTRATION')}>
+                <ListItem button key='BOT_SETTINGS' onClick={() => selectPage('BOTS_SETTINGS')}>
+                  <ListItemIcon className={classes.multiListItemIcon}>
+                    <span style={{marginRight: 5}}><FontAwesomeIcon icon={faRobot}/></span>
+                  </ListItemIcon>
+                  <ListItemText primary={t('BOT_SETTINGS')}/>
+                </ListItem>
+                <ListItem button key='CUSTOM_COMMANDS' onClick={() => selectPage('CUSTOM_COMMANDS')}>
+                  <ListItemIcon className={classes.multiListItemIcon}><SettingsIcon/></ListItemIcon>
+                  <ListItemText primary={t('CUSTOM_COMMANDS')}/>
+                </ListItem>
+              </List>
+            </div>
+          </Drawer>
+        </nav>
+        <main className={classes.content}>
+          <div className={classes.toolbar}/>
+          {
+            selectedPage === 'POINTS_LEADERBOARD' && <PointsLeaderboard/>
+          }
+          {
+            selectedPage === 'DONATION_LEADERBOARD' && <DonationLeaderboard/>
+          }
+          {
+            selectedPage === 'BITS_LEADERBOARD' && <BitsLeaderboard/>
+          }
+        </main>
+      </div>
+    </>
   )
 }
 

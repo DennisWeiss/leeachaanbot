@@ -9,6 +9,10 @@
       "ADMINISTRATION": "Administration",
       "BOT_SETTINGS": "Bot Settings",
       "CUSTOM_COMMANDS": "Custom Commands"
+    },
+    "PointsLeaderboard": {
+      "TITLE": "Points Leaderboard",
+      "USER": "User"
     }
   },
   "de": {
@@ -21,6 +25,10 @@
       "ADMINISTRATION": "Administrierung",
       "BOT_SETTINGS": "Bot Einstellungen",
       "CUSTOM_COMMANDS": "Benutzerdefinierte Befehle"
+    },
+    "PointsLeaderboard": {
+      "TITLE": "Punkteliste",
+      "USER": "Nutzer"
     }
   }
 }

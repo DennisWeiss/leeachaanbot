@@ -4,8 +4,9 @@ import org.springframework.data.annotation.Id;
 
 public class Users {
     @Id
-    private String userId;
+    private String _id;
 
+    private String userId;
     private String name;
     private String displayName;
     private String profilePictureUrl;

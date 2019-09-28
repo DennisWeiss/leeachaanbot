@@ -1,6 +1,10 @@
+server:
+  port: 11000
+
 spring:
   data:
     mongodb:
       host: localhost
       port: 27017
       database: leeachaanbot
+

@@ -32,7 +32,7 @@ public class LeaderboardController {
     }
 
     @RequestMapping(path = "/bits", method = RequestMethod.GET)
-    public HttpEntity<List<BitsLeaderboardEntry>> getBitsLeaderboard() {
+    public HttpEntity<List<PointsLeaderboardEntry>> getBitsLeaderboard() {
         return new ResponseEntity<>(leaderboardService.getBitsLeaderboard(), HttpStatus.OK);
     }
 

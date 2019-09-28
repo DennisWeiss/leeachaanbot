@@ -18,6 +18,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LeaderboardService {
@@ -60,12 +62,12 @@ public class LeaderboardService {
         return pointsLeaderboardEntries;
     }
 
-    public List<BitsLeaderboardEntry> getBitsLeaderboard() {
+    public List<PointsLeaderboardEntry> getBitsLeaderboard() {
         RestTemplate restTemplate = new RestTemplate();
 
 
         HttpHeaders headers = new HttpHeaders();
-        //TODO: Update on expired access token
+
         headers.set("Authorization", "Bearer " + securityRepository.findAll().get(0).getAccessToken());
 
         try {
@@ -81,12 +83,30 @@ public class LeaderboardService {
             } else {
                 BitsLeaderboardData bitsLeaderboardData = response.getBody();
 
-                return bitsLeaderboardData.getData();
+                return mapBitsLeaderboardData(bitsLeaderboardData.getData());
             }
         } catch (RestClientException e) {
             refreshTwitchApiTokenService.refreshTwitchApiToken();
             return getBitsLeaderboard();
         }
 
+    }
+
+    private List<PointsLeaderboardEntry> mapBitsLeaderboardData(List<BitsLeaderboardEntry> leaderboard) {
+        return leaderboard
+                .stream()
+                .map(this::mapBitsLeaderboardEntry)
+                .collect(Collectors.toList());
+    }
+
+    private PointsLeaderboardEntry mapBitsLeaderboardEntry(BitsLeaderboardEntry bitsLeaderboardEntry) {
+        Optional<Users> userOptional = userRepository.findByName(bitsLeaderboardEntry.getUser_name().toLowerCase());
+
+        return new PointsLeaderboardEntry()
+                .position(bitsLeaderboardEntry.getRank())
+                .username(bitsLeaderboardEntry.getUser_name())
+                .points(bitsLeaderboardEntry.getScore())
+                .userId(bitsLeaderboardEntry.getUser_id())
+                .profilePicture(userOptional.isPresent() ? userOptional.get().getProfilePictureUrl() : "");
     }
 }

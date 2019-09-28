@@ -2,6 +2,7 @@ const tmi = require('tmi.js')
 const axios = require('axios')
 const mongoose = require('mongoose')
 const Security = require('./model/Security')
+const User = require('./model/User')
 
 const conf = require('./conf/conf')
 
@@ -77,6 +78,24 @@ function onMessageHandler(target, context, msg, self) {
 function onConnectedHandler(addr, port) {
   console.log(`* Connected to ${addr}:${port}`)
 }
+
+
+User.find({})
+  .exec((err, users) => {
+    users.forEach(user => {
+      axios.get(`https://api.twitch.tv/helix/users?login=${user.name}`, {
+        headers: {
+          'Client-ID': conf.clientId
+        }
+      })
+        .then(res => {
+          if (res.data && res.data.data && res.data.data.length > 0) {
+            user.userId = res.data.data[0].id
+            user.save().then(() => {})
+          }
+        })
+    })
+  })
 
 
 setInterval(fetchCycle.update, conf.currency.iterationCycleInMs)

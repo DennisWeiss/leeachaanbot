@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -24,13 +25,16 @@ public class LeaderboardService {
     private final UserRepository userRepository;
     private final ConfigRepository configRepository;
     private final SecurityRepository securityRepository;
+    private final RefreshTwitchApiTokenService refreshTwitchApiTokenService;
 
     @Autowired
     public LeaderboardService(UserRepository userRepository, ConfigRepository configRepository,
-                              SecurityRepository securityRepository) {
+                              SecurityRepository securityRepository,
+                              RefreshTwitchApiTokenService refreshTwitchApiTokenService) {
         this.userRepository = userRepository;
         this.configRepository = configRepository;
         this.securityRepository = securityRepository;
+        this.refreshTwitchApiTokenService = refreshTwitchApiTokenService;
     }
 
     public List<PointsLeaderboardEntry> getPointsLeaderboard() {
@@ -64,15 +68,25 @@ public class LeaderboardService {
         //TODO: Update on expired access token
         headers.set("Authorization", "Bearer " + securityRepository.findAll().get(0).getAccessToken());
 
-        ResponseEntity<BitsLeaderboardData> response = restTemplate.exchange(
-                "https://api.twitch.tv/helix/bits/leaderboard",
-                HttpMethod.GET,
-                new HttpEntity<>(headers),
-                BitsLeaderboardData.class
-        );
+        try {
+            ResponseEntity<BitsLeaderboardData> response = restTemplate.exchange(
+                    "https://api.twitch.tv/helix/bits/leaderboard",
+                    HttpMethod.GET,
+                    new HttpEntity<>(headers),
+                    BitsLeaderboardData.class
+            );
+            if (response.getStatusCode().value() == 401) {
+                refreshTwitchApiTokenService.refreshTwitchApiToken();
+                return getBitsLeaderboard();
+            } else {
+                BitsLeaderboardData bitsLeaderboardData = response.getBody();
 
-        BitsLeaderboardData bitsLeaderboardData = response.getBody();
+                return bitsLeaderboardData.getData();
+            }
+        } catch (RestClientException e) {
+            refreshTwitchApiTokenService.refreshTwitchApiToken();
+            return getBitsLeaderboard();
+        }
 
-        return bitsLeaderboardData.getData();
     }
 }

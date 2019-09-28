@@ -1,4 +1,4 @@
 {
-  "leaderboardEndpoint": "http://localhost:8080/leaderboard",
-  "configEndpoint": "http://localhost:8080/config"
+  "leaderboardEndpoint": "http://gr-esports.de:11000/leaderboard",
+  "configEndpoint": "http://gr-esports.de:11000/config"
 }

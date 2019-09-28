@@ -80,22 +80,4 @@ function onConnectedHandler(addr, port) {
 }
 
 
-User.find({})
-  .exec((err, users) => {
-    users.forEach(user => {
-      axios.get(`https://api.twitch.tv/helix/users?login=${user.name}`, {
-        headers: {
-          'Client-ID': conf.clientId
-        }
-      })
-        .then(res => {
-          if (res.data && res.data.data && res.data.data.length > 0) {
-            user.userId = res.data.data[0].id
-            user.save().then(() => {})
-          }
-        })
-    })
-  })
-
-
 setInterval(fetchCycle.update, conf.currency.iterationCycleInMs)

@@ -35,18 +35,18 @@ class BitsLeaderboard extends React.Component {
           </TableHead>
           <TableBody>
             {this.state.leaderboard.map(user => (
-              <TableRow key={user.user_name}>
+              <TableRow key={user.username}>
                 <TableCell>
-                  {user.rank}.
+                  {user.position}.
                 </TableCell>
                 <TableCell>
                   <div className='userEntry'>
                     <img style={{marginRight: 10}} src={user.profilePicture} width={32} />
-                    <a href={`https://twitch.tv/${user.user_name}`}>{user.user_name}</a>
+                    <a href={`https://twitch.tv/${user.username}`}>{user.username}</a>
                   </div>
                 </TableCell>
                 <TableCell>
-                  {user.score}
+                  {user.points}
                 </TableCell>
               </TableRow>
             ))}

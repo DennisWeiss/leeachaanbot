@@ -53,6 +53,7 @@ public class ScheduledConfiguration {
             TwitchUser twitchUser = userData != null && userData.getData() != null && userData.getData().size() > 0 ?
                     userData.getData().get(0) : null;
             if (twitchUser != null) {
+                user.setUserId(twitchUser.getId());
                 user.setDisplayName(twitchUser.getDisplay_name());
                 user.setProfilePictureUrl(twitchUser.getProfile_image_url());
             }

@@ -3,6 +3,7 @@ package com.weissdennis.leeachaanbot.persistence;
 import org.springframework.data.annotation.Id;
 
 public class Users {
+
     @Id
     private String _id;
 

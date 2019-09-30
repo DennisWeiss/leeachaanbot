@@ -1,7 +1,7 @@
 {
   "en": {
     "locale": "en",
-    "Page":{
+    "Page": {
       "LEADERBOARDS": "Leaderboards",
       "POINTS_LEADERBOARD": "Points Leaderboard",
       "DONATION_LEADERBOARD": "Donation Leaderboard",
@@ -23,6 +23,12 @@
       "TITLE": "Bits Leaderboard",
       "USER": "User",
       "BITS": "Bits"
+    },
+    "InsufficientPermissions": {
+      "INSUFFICIENT_PERMISSIONS": "You don't have the required rights to access this!"
+    },
+    "LoggedInAsAdministrator": {
+      "LOGGED_IN_AS_ADMINISTRATOR": "You have to be logged in as moderator or the streamer him/herself!"
     }
   },
   "de": {
@@ -49,6 +55,12 @@
       "TITLE": "Bitsliste",
       "USER": "Nutzer",
       "BITS": "Bits"
+    },
+    "InsufficientPermissions": {
+      "INSUFFICIENT_PERMISSIONS": "Du hast nicht die nötigen Rechte um hier zuzugreifen!"
+    },
+    "LoggedInAsAdministrator": {
+      "LOGGED_IN_AS_ADMINISTRATOR": "Du musst als Moderator oder der/die Streamer*in eingeloggt sein."
     }
   }
 }

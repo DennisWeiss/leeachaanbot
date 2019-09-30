@@ -22,6 +22,12 @@ import PointsLeaderboard from './leaderboards/PointsLeaderboard'
 import DonationLeaderboard from './leaderboards/DonationLeaderboard'
 import BitsLeaderboard from './leaderboards/BitsLeaderboard'
 import LoginButton from './Login/LoginButton'
+import UserLoggedInfo from './Login/UserLoggedInfo'
+import {hasAdministrationRights} from '../helper/helper'
+import BotSettingsPage from './Administration/BotSettingsPage'
+import InsufficientPermission from './InsufficientPermissions'
+import LoggedInAsAdministrator from './LoggedInAsAdministrator'
+import CustomCommandsPage from './Administration/CustomCommandsPage'
 
 
 const drawerWidth = 240
@@ -76,6 +82,7 @@ const Page = ({t, selectPage, selectedPage, loggedInUser}) => {
           <span style={{marginRight: 10}}><img src='leea-emote-128.png' width={32}/></span>
           <h3>LeeaChaanBot Dashboard</h3>
           {!loggedInUser && <LoginButton/>}
+          {loggedInUser && <UserLoggedInfo loggedInUser={loggedInUser}/>}
         </Toolbar>
       </AppBar>
       <div className={classes.root}>
@@ -113,7 +120,7 @@ const Page = ({t, selectPage, selectedPage, loggedInUser}) => {
               </List>
               <Divider/>
               <List subheader={t('ADMINISTRATION')}>
-                <ListItem button key='BOT_SETTINGS' onClick={() => selectPage('BOTS_SETTINGS')}>
+                <ListItem button key='BOT_SETTINGS' onClick={() => selectPage('BOT_SETTINGS')}>
                   <ListItemIcon className={classes.multiListItemIcon}>
                     <span style={{marginRight: 5}}><FontAwesomeIcon icon={faRobot}/></span>
                   </ListItemIcon>
@@ -137,6 +144,24 @@ const Page = ({t, selectPage, selectedPage, loggedInUser}) => {
           }
           {
             selectedPage === 'BITS_LEADERBOARD' && <BitsLeaderboard/>
+          }
+          {
+            selectedPage === 'BOT_SETTINGS' && loggedInUser && hasAdministrationRights(loggedInUser.id) && <BotSettingsPage/>
+          }
+          {
+            selectedPage === 'BOT_SETTINGS' && loggedInUser && !hasAdministrationRights(loggedInUser.id) && <InsufficientPermission/>
+          }
+          {
+            selectedPage === 'BOT_SETTINGS' && !loggedInUser  && <LoggedInAsAdministrator/>
+          }
+          {
+            selectedPage === 'CUSTOM_COMMANDS' && loggedInUser && hasAdministrationRights(loggedInUser.id) && <CustomCommandsPage/>
+          }
+          {
+            selectedPage === 'CUSTOM_COMMANDS' && loggedInUser && !hasAdministrationRights(loggedInUser.id) && <InsufficientPermission/>
+          }
+          {
+            selectedPage === 'CUSTOM_COMMANDS' && !loggedInUser  && <LoggedInAsAdministrator/>
           }
         </main>
       </div>

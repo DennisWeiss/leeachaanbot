@@ -174,29 +174,33 @@ const donationLeaderboard = (client, target, username) => {
 }
 
 const give = (client, target, userId, username, usernameToGive, pointsToGive) => {
-  User.findOne({userId})
-    .exec((err, user) => {
-      if (user) {
-        if (pointsToGive > user.points) {
-          client.say(target, `@${username} Du hast leider nicht genug ${conf.currency.namePlural}.`)
-        } else {
-          User.findOne({name: usernameToGive.toLowerCase()})
-            .exec((err, userToGive) => {
-              if (userToGive) {
-                user.points -= pointsToGive
-                userToGive.points += pointsToGive
-                user.save().then(() => {
-                })
-                userToGive.save().then(() => {
-                })
-                client.say(target, `@${username} hat @${usernameToGive} ${formatPoints(pointsToGive)} gegeben.`)
-              } else {
-                client.say(target, `@${username} Ich konnte ${usernameToGive} leider nicht finden.`)
-              }
-            })
+  if (username.toLowerCase() === usernameToGive.toLowerCase()) {
+    client.say(target, `@${username} Du kannst dir doch nicht selber ${conf.currency.namePlural} geben. 🤭`)
+  } else {
+    User.findOne({userId})
+      .exec((err, user) => {
+        if (user) {
+          if (pointsToGive > user.points) {
+            client.say(target, `@${username} Du hast leider nicht genug ${conf.currency.namePlural}.`)
+          } else {
+            User.findOne({name: usernameToGive.toLowerCase()})
+              .exec((err, userToGive) => {
+                if (userToGive) {
+                  user.points -= pointsToGive
+                  userToGive.points += pointsToGive
+                  user.save().then(() => {
+                  })
+                  userToGive.save().then(() => {
+                  })
+                  client.say(target, `@${username} hat @${usernameToGive} ${formatPoints(pointsToGive)} gegeben.`)
+                } else {
+                  client.say(target, `@${username} Ich konnte ${usernameToGive} leider nicht finden.`)
+                }
+              })
+          }
         }
-      }
-    })
+      })
+  }
 }
 
 const formatPoints = points => `${points} ${points === 1 ? conf.currency.nameSingular : conf.currency.namePlural}`

@@ -43,7 +43,7 @@ public class ScheduledConfiguration {
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<UserData> response = restTemplate.exchange(
-                    "https://api.twitch.tv/helix/users?login=" + user.getName(),
+                    "https://api.twitch.tv/helix/users?id=" + user.getUserId(),
                     HttpMethod.GET,
                     new HttpEntity<>(headers),
                     UserData.class
@@ -53,7 +53,7 @@ public class ScheduledConfiguration {
             TwitchUser twitchUser = userData != null && userData.getData() != null && userData.getData().size() > 0 ?
                     userData.getData().get(0) : null;
             if (twitchUser != null) {
-                user.setUserId(twitchUser.getId());
+                user.setName(twitchUser.getLogin());
                 user.setDisplayName(twitchUser.getDisplay_name());
                 user.setProfilePictureUrl(twitchUser.getProfile_image_url());
             }

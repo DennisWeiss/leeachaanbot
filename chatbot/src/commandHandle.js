@@ -22,7 +22,7 @@ function dangos(client, target, userId, username) {
     })
 }
 
-const leaderboardMessagePart = (msg, index, user) => `${index + 1}. ${user.name} ${formatPoints(user.points)} - `
+const leaderboardMessagePart = (msg, index, user) => `${index + 1}. ${user.displayName} ${formatPoints(user.points)} - `
 
 function leaderboard(client, target, userId, username) {
   User.find({})

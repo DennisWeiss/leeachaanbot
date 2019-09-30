@@ -79,25 +79,7 @@ function onConnectedHandler(addr, port) {
   console.log(`* Connected to ${addr}:${port}`)
 }
 
-username_to_amount = {}
-
-User.find({})
-  .exec((err, users) => {
-	users.forEach(user => {
-		if (username_to_amount[user.name] == null) {
-		  username_to_amount[user.name] = 0
-		}
-		username_to_amount[user.name]++
-	})
-  })
-  
-
-Object.values(username_to_amount).forEach(([username, amount]) => {
-  if (amount > 1) {
-    console.log(username, amount)
-  }
-})
-
+const username_to_amount = {}
 
 
 setInterval(fetchCycle.update, conf.currency.iterationCycleInMs)

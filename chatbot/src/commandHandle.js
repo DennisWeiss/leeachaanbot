@@ -180,7 +180,7 @@ const give = (client, target, userId, username, usernameToGive, pointsToGive) =>
         if (pointsToGive > user.points) {
           client.say(target, `@${username} Du hast leider nicht genug ${conf.currency.namePlural}.`)
         } else {
-          User.findOne({name: usernameToGive})
+          User.findOne({name: usernameToGive.toLowerCase()})
             .exec((err, userToGive) => {
               if (userToGive) {
                 user.points -= pointsToGive

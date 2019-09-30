@@ -79,7 +79,5 @@ function onConnectedHandler(addr, port) {
   console.log(`* Connected to ${addr}:${port}`)
 }
 
-const username_to_amount = {}
-
 
 setInterval(fetchCycle.update, conf.currency.iterationCycleInMs)

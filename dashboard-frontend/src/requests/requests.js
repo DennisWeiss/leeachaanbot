@@ -11,5 +11,11 @@ const fetchBitsLeaderboard = () => axios.get(`${conf.leaderboardEndpoint}/bits`)
 
 const fetchConfig = () => axios.get(`${conf.configEndpoint}/current`)
 
+const currentUserInfo = accessToken => axios.get('https://api.twitch.tv/helix/users', {
+  headers: {
+    Authorization: `Bearer ${accessToken}`
+  }
+})
 
-export {fetchPointsLeadeboard, fetchDonationLeaderboard, fetchBitsLeaderboard, fetchConfig}
+
+export {fetchPointsLeadeboard, fetchDonationLeaderboard, fetchBitsLeaderboard, fetchConfig, currentUserInfo}

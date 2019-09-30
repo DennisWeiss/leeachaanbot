@@ -1,4 +1,6 @@
 {
   "leaderboardEndpoint": "http://gr-esports.de:11000/leaderboard",
-  "configEndpoint": "http://gr-esports.de:11000/config"
+  "configEndpoint": "http://gr-esports.de:11000/config",
+  "clientId": "w2wiz22s7vnnxi03f7qyt3dbal8mlj",
+  "hostUri": "http://localhost:11001"
 }

@@ -21,6 +21,7 @@ import {faRobot} from '@fortawesome/free-solid-svg-icons'
 import PointsLeaderboard from './leaderboards/PointsLeaderboard'
 import DonationLeaderboard from './leaderboards/DonationLeaderboard'
 import BitsLeaderboard from './leaderboards/BitsLeaderboard'
+import LoginButton from './Login/LoginButton'
 
 
 const drawerWidth = 240
@@ -63,7 +64,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Page = ({t, selectPage, selectedPage}) => {
+const Page = ({t, selectPage, selectedPage, loggedInUser}) => {
 
   const classes = useStyles()
   const theme = useTheme()
@@ -74,6 +75,7 @@ const Page = ({t, selectPage, selectedPage}) => {
         <Toolbar>
           <span style={{marginRight: 10}}><img src='leea-emote-128.png' width={32}/></span>
           <h3>LeeaChaanBot Dashboard</h3>
+          {!loggedInUser && <LoginButton/>}
         </Toolbar>
       </AppBar>
       <div className={classes.root}>

@@ -2,7 +2,8 @@ import React from 'react'
 import {translate} from 'react-translate'
 import {Paper, Table, TableBody, TableCell, TableHead, TableRow} from '@material-ui/core'
 import {fetchConfig, fetchDonationLeaderboard} from '../../requests/requests'
-import {round} from '../../helper/helper'
+import numeral from 'numeral'
+import './DonationLeaderboard.scss'
 
 class DonationLeaderboard extends React.Component {
 
@@ -28,21 +29,21 @@ class DonationLeaderboard extends React.Component {
   render() {
     const {t} = this.props
 
-    return <div>
+    return <div className='donationLeaderboard'>
       <h2>{t('TITLE')}</h2>
-      <Paper>
+      <Paper className='tablePaper'>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell></TableCell>
+              <TableCell className='positionCell'></TableCell>
               <TableCell>{t('USER')}</TableCell>
-              <TableCell>{t('DONATION_AMOUNT')}</TableCell>
+              <TableCell align='right'>{t('DONATION_AMOUNT')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {Object.entries(this.state.leaderboard).map(([index, user]) => (
               <TableRow key={user.username}>
-                <TableCell>
+                <TableCell className='positionCell'>
                   {parseInt(index) + 1}.
                 </TableCell>
                 <TableCell>
@@ -50,8 +51,8 @@ class DonationLeaderboard extends React.Component {
                     {user.username}
                   </div>
                 </TableCell>
-                <TableCell>
-                  {round(2, true)(user.amount)} {this.state.donationCurrency}
+                <TableCell align='right'>
+                  {numeral(user.amount).format('0,000.00')} {this.state.donationCurrency}
                 </TableCell>
               </TableRow>
             ))}

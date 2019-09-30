@@ -2,6 +2,8 @@ import React from 'react'
 import {translate} from 'react-translate'
 import {Paper, Table, TableBody, TableCell, TableHead, TableRow} from '@material-ui/core'
 import {fetchBitsLeaderboard} from '../../requests/requests'
+import numeral from 'numeral'
+import './BitsLeaderboard.scss'
 
 
 class BitsLeaderboard extends React.Component {
@@ -22,21 +24,21 @@ class BitsLeaderboard extends React.Component {
   render() {
     const {t} = this.props
 
-    return <div>
+    return <div className='bitsLeaderboard'>
       <h2>{t('TITLE')}</h2>
-      <Paper>
+      <Paper className='tablePaper'>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell></TableCell>
+              <TableCell className='positionCell'></TableCell>
               <TableCell>{t('USER')}</TableCell>
-              <TableCell>{t('BITS')}</TableCell>
+              <TableCell align='right'>{t('BITS')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {this.state.leaderboard.map(user => (
               <TableRow key={user.username}>
-                <TableCell>
+                <TableCell className='positionCell'>
                   {user.position}.
                 </TableCell>
                 <TableCell>
@@ -45,8 +47,8 @@ class BitsLeaderboard extends React.Component {
                     <a href={`https://twitch.tv/${user.username}`}>{user.username}</a>
                   </div>
                 </TableCell>
-                <TableCell>
-                  {user.points}
+                <TableCell align='right'>
+                  {numeral(user.points).format()}
                 </TableCell>
               </TableRow>
             ))}

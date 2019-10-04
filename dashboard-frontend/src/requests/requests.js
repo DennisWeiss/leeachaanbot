@@ -19,6 +19,8 @@ const currentUserInfo = accessToken => axios.get('https://api.twitch.tv/helix/us
 
 const getAllCustomCommands = () => axios.get(`${conf.customCommandEndpoint}/all`)
 
+const deleteCustomCommand = id => axios.delete(`${conf.customCommandEndpoint}/delete/${id}`)
+
 
 export {
   fetchPointsLeadeboard,
@@ -26,5 +28,6 @@ export {
   fetchBitsLeaderboard,
   fetchConfig,
   currentUserInfo,
-  getAllCustomCommands
+  getAllCustomCommands,
+  deleteCustomCommand
 }

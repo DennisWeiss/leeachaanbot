@@ -34,6 +34,12 @@
       "COMMAND_HANDLES": "Command handles",
       "RESPONSE": "Response",
       "SHOW_TWITCH_HANDLE": "Show Twitch handle"
+    },
+    "DeleteCustomCommandDialog": {
+      "TITLE": "Delete custom command",
+      "DELETION_WARNING": "............",
+      "CANCEL": "Cancel",
+      "DELETE": "Delete"
     }
   },
   "de": {
@@ -71,6 +77,12 @@
       "COMMAND_HANDLES": "Befehle",
       "RESPONSE": "Antwort",
       "SHOW_TWITCH_HANDLE": "Zeige Twitch Namen"
+    },
+    "DeleteCustomCommandDialog": {
+      "TITLE": "Lösche benutzerdefinierten Befehl",
+      "DELETION_WARNING": "............",
+      "CANCEL": "Abbrechen",
+      "DELETE": "Löschen"
     }
   }
 }

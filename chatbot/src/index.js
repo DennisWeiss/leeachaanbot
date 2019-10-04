@@ -24,7 +24,7 @@ const opts = {
     username: conf.botUsername,
     password: conf.botOAuthPassword
   },
-  channels: [conf.broadcasterChannelName]
+  channels: [/*conf.broadcasterChannelName*/ "dennisweiss"]
 
 }
 

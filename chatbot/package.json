@@ -22,8 +22,8 @@
   },
   "homepage": "https://github.com/DennisWeiss/leeachaanbot#readme",
   "dependencies": {
-    "axios": "^0.19.0",
-    "mongoose": "^5.7.1",
-    "tmi.js": "^1.5.0"
+    "axios": "0.19.0",
+    "mongoose": "5.7.3",
+    "tmi.js": "1.5.0"
   }
 }

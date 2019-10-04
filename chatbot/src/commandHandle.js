@@ -1,6 +1,7 @@
 const global = require('./global')
 const User = require('./model/User')
 const Security = require('./model/Security')
+const Command = require('./model/Command')
 const conf = require('./conf/conf')
 const roulette = require('./model/roulette')
 const translations = require('./conf/translations')
@@ -249,6 +250,17 @@ function handleCommand(client, target, context, cmd) {
       }
     }
   } else {
+    Command.find({})
+      .exec((err, commands) => {
+        commands.forEach(command => {
+          command.commandHandles.forEach(commandHandle => {
+            if (cmd === `!${commandHandle}`) {
+              client.say(target, (command.showTwitchHandle ? `@${context.username} ` : '') + command.response)
+            }
+          })
+        })
+      })
+
     switch (cmd) {
       case '!p':
         dangos(client, target, context['user-id'], context.username)
@@ -262,17 +274,11 @@ function handleCommand(client, target, context, cmd) {
       case '!rekord':
         leaderboard(client, target, context['user-id'], context.username)
         break
-      case '!epic':
-        client.say(target, `@${context.username} Genauso wie auf Twitch: LeeaChaan`)
-        break
       case '!bits':
         bitsLeaderboard(client, target, context['user-id'], context.username)
         break
       case '!donations':
         donationLeaderboard(client, target, context.username)
-        break
-      case '!dc':
-        client.say(target, 'https://discord.gg/cQPmZwT')
         break
       case '!h':
         help(client, target, context.username)

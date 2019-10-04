@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <properties>
         <java.version>1.8</java.version>
+        <org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
     </properties>
@@ -29,6 +30,11 @@
             <artifactId>spring-data-mongodb</artifactId>
             <version>2.1.9.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -38,7 +44,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <fork>true</fork>
-                    <mainClass>com.weissdennis.leeachaanbot.LeeaChaanBotDashboardApplication</mainClass>
+                    <mainClass>com.weissdennis.leeachaanbot.LeeaChaanBotDashboardApplication</mainClass>=
                 </configuration>
                 <executions>
                     <execution>
@@ -47,6 +53,23 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version> <!-- or newer version -->
+                <configuration>
+                    <source>${maven.compiler.source}</source> <!-- depending on your project -->
+                    <target>${maven.compiler.target}</target> <!-- depending on your project -->
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${org.mapstruct.version}</version>
+                        </path>
+                        <!-- other annotation processors -->
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>

@@ -1,7 +1,7 @@
 const global = require('./global')
 const User = require('./model/User')
 const Security = require('./model/Security')
-const Command = require('./model/Command')
+const Command = require('./model/CustomCommand')
 const conf = require('./conf/conf')
 const roulette = require('./model/roulette')
 const translations = require('./conf/translations')
@@ -260,6 +260,10 @@ function handleCommand(client, target, context, cmd) {
           })
         })
       })
+
+    const test = new Command()
+
+    test.save().then(() => {})
 
     switch (cmd) {
       case '!p':

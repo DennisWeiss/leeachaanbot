@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 
 
-const Command = mongoose.model('Command', {
+const CustomCommand = mongoose.model('CustomCommand', {
   commandHandles: [String],
   response: String,
   showTwitchHandle: Boolean
 })
 
-module.exports = Command
+module.exports = CustomCommand

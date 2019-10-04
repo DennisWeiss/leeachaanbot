@@ -17,5 +17,14 @@ const currentUserInfo = accessToken => axios.get('https://api.twitch.tv/helix/us
   }
 })
 
+const getAllCustomCommands = () => axios.get(`${conf.customCommandEndpoint}/all`)
 
-export {fetchPointsLeadeboard, fetchDonationLeaderboard, fetchBitsLeaderboard, fetchConfig, currentUserInfo}
+
+export {
+  fetchPointsLeadeboard,
+  fetchDonationLeaderboard,
+  fetchBitsLeaderboard,
+  fetchConfig,
+  currentUserInfo,
+  getAllCustomCommands
+}

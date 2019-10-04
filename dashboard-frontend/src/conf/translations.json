@@ -29,6 +29,11 @@
     },
     "LoggedInAsAdministrator": {
       "LOGGED_IN_AS_ADMINISTRATOR": "You have to be logged in as moderator or the streamer him/herself!"
+    },
+    "CustomCommandsPage": {
+      "COMMAND_HANDLES": "Command handles",
+      "RESPONSE": "Response",
+      "SHOW_TWITCH_HANDLE": "Show Twitch handle"
     }
   },
   "de": {
@@ -61,6 +66,11 @@
     },
     "LoggedInAsAdministrator": {
       "LOGGED_IN_AS_ADMINISTRATOR": "Du musst als Moderator oder der/die Streamer*in eingeloggt sein."
+    },
+    "CustomCommandsPage": {
+      "COMMAND_HANDLES": "Befehle",
+      "RESPONSE": "Antwort",
+      "SHOW_TWITCH_HANDLE": "Zeige Twitch Namen"
     }
   }
 }

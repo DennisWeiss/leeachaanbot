@@ -1,0 +1,25 @@
+.actionItems {
+  display: flex;
+  margin-left: auto;
+  margin-right: 10px;
+  max-width: 70px;
+
+}
+
+.editIcon {
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.editIcon:hover {
+  color: blue;
+}
+
+.deleteIcon {
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.deleteIcon:hover {
+  color: red;
+}

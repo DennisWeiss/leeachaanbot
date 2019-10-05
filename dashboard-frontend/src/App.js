@@ -30,10 +30,10 @@ class App extends React.Component {
           if (res.data && res.data.data && res.data.data.length > 0) {
             this.setState({loggedInUser: res.data.data[0]})
           } else {
-            localStorage.removeItem('acessToken')
+            localStorage.removeItem('accessToken')
           }
         })
-        .catch(err => localStorage.removeItem('acessToken'))
+        .catch(err => localStorage.removeItem('accessToken'))
     }
   }
 
@@ -43,7 +43,8 @@ class App extends React.Component {
     console.log(this.state.loggedInUser)
     return (
       <TranslatorProvider translations={translations[this.state.locale]}>
-        <Page selectedPage={this.state.selectedPage} selectPage={this.selectPage.bind(this)} loggedInUser={this.state.loggedInUser}/>
+          <Page selectedPage={this.state.selectedPage} selectPage={this.selectPage.bind(this)}
+                loggedInUser={this.state.loggedInUser}/>
       </TranslatorProvider>
     )
   }

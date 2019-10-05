@@ -22,4 +22,5 @@ const round = (digits, fixedDecimals) => number => {
 // TODO: proper implementation
 const hasAdministrationRights = userId => userId === '61270112'
 
+
 export {round, hasAdministrationRights}

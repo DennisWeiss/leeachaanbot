@@ -4,6 +4,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import {translate} from 'react-translate'
 import {Select, Input, Checkbox} from 'antd'
 import {addCustomCommand} from '../../requests/requests'
+import queryString from 'query-string'
 
 
 class AddCustomCommandDialog extends React.Component {
@@ -32,14 +33,23 @@ class AddCustomCommandDialog extends React.Component {
     modifiedCustomCommand.commandHandles = modifiedCustomCommand.commandHandles.map(
       commandHandle => commandHandle.substr(1, commandHandle.length)
     )
-    addCustomCommand(modifiedCustomCommand)
-      .then(res => {
-        if (res.status === 200) {
-          this.handleClose()
-          this.openSuccessSnackbar()
-          this.props.reload()
-        }
-      })
+    const parsed = queryString.parse(window.location.hash)
+    let accessToken = parsed.access_token
+    if (!accessToken) {
+      accessToken = localStorage.getItem('accessToken')
+    }
+    if (accessToken) {
+      localStorage.setItem('accessToken', accessToken)
+      addCustomCommand(modifiedCustomCommand, accessToken)
+        .then(res => {
+          if (res.status === 200) {
+            this.handleClose()
+            this.openSuccessSnackbar()
+            this.props.reload()
+          }
+        })
+    }
+
   }
 
   handleResponseChange(event) {

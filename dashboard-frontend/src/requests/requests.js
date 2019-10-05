@@ -19,11 +19,23 @@ const currentUserInfo = accessToken => axios.get('https://api.twitch.tv/helix/us
 
 const getAllCustomCommands = () => axios.get(`${conf.customCommandEndpoint}/all`)
 
-const deleteCustomCommand = id => axios.delete(`${conf.customCommandEndpoint}/delete/${id}`)
+const deleteCustomCommand = (id, accessToken) => axios.delete(`${conf.customCommandEndpoint}/delete/${id}`, {
+  headers: {
+    Authorization: accessToken
+  }
+})
 
-const addCustomCommand = customCommand => axios.post(`${conf.customCommandEndpoint}/add`, customCommand)
+const addCustomCommand = (customCommand, accessToken) => axios.post(`${conf.customCommandEndpoint}/add`, customCommand, {
+  headers: {
+    Authorization: accessToken
+  }
+})
 
-const updateCustomCommand = customCommand => axios.post(`${conf.customCommandEndpoint}/update`, customCommand)
+const updateCustomCommand = (customCommand, accessToken) => axios.post(`${conf.customCommandEndpoint}/update`, customCommand, {
+  headers: {
+    Authorization: accessToken
+  }
+})
 
 export {
   fetchPointsLeadeboard,

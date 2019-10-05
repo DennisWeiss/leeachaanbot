@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
@@ -24,8 +21,8 @@ public class PermissionsController {
     }
 
     @RequestMapping(path = "/administration", method = RequestMethod.POST)
-    public HttpEntity<Rights> hasAdministrationRights(String accessToken) {
-        boolean hasAdministrationRights = permissionsService.hasAdministrationRights(accessToken);
+    public HttpEntity<Rights> hasAdministrationRights(@RequestHeader("Authorization") String authorization) {
+        boolean hasAdministrationRights = permissionsService.hasAdministrationRights(authorization);
         return new ResponseEntity<>(new Rights(hasAdministrationRights), HttpStatus.OK);
     }
 }

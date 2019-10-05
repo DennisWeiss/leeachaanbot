@@ -5,6 +5,7 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, S
 import CloseIcon from '@material-ui/icons/Close'
 import {Checkbox, Input, Select} from 'antd'
 import isEqual from 'lodash.isequal'
+import queryString from 'query-string'
 
 
 class EditCustomCommandDialog extends React.Component {
@@ -36,14 +37,23 @@ class EditCustomCommandDialog extends React.Component {
     modifiedCustomCommand.commandHandles = modifiedCustomCommand.commandHandles.map(
       commandHandle => commandHandle.substr(1, commandHandle.length)
     )
-    updateCustomCommand(modifiedCustomCommand)
-      .then(res => {
-        if (res.status === 200) {
-          this.handleClose()
-          this.openSuccessSnackbar()
-          this.props.reload()
-        }
-      })
+    const parsed = queryString.parse(window.location.hash)
+    let accessToken = parsed.access_token
+    if (!accessToken) {
+      accessToken = localStorage.getItem('accessToken')
+    }
+    if (accessToken) {
+      localStorage.setItem('accessToken', accessToken)
+      console.log('accessToken', accessToken)
+      updateCustomCommand(modifiedCustomCommand, accessToken)
+        .then(res => {
+          if (res.status === 200) {
+            this.handleClose()
+            this.openSuccessSnackbar()
+            this.props.reload()
+          }
+        })
+    }
   }
 
   handleResponseChange(event) {

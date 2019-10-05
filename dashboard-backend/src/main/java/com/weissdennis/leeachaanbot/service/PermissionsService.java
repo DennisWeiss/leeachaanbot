@@ -30,55 +30,59 @@ public class PermissionsService {
     }
 
     public boolean hasAdministrationRights(String accessToken) {
-        UserData userData = getUserDataFromToken(accessToken);
+        try {
+            UserData userData = getUserDataFromToken(accessToken);
 
-        if (userData != null && userData.getData() != null && userData.getData().size() > 0) {
-            TwitchUser twitchUser = userData.getData().get(0);
+            if (userData != null && userData.getData() != null && userData.getData().size() > 0) {
+                TwitchUser twitchUser = userData.getData().get(0);
 
-            List<Configs> configs = configRepository.findAll();
-            if (configs.size() > 0) {
-                if (configs.get(0).getBroadcasterChannelName().toLowerCase().equals(twitchUser.getLogin().toLowerCase())) {
-                    return true;
-                }
+                List<Configs> configs = configRepository.findAll();
+                if (configs.size() > 0) {
+                    if (configs.get(0).getBroadcasterChannelName().toLowerCase().equals(twitchUser.getLogin().toLowerCase())) {
+                        return true;
+                    }
 
-                RestTemplate restTemplate = new RestTemplate();
+                    RestTemplate restTemplate = new RestTemplate();
 
-                HttpHeaders headers = new HttpHeaders();
+                    HttpHeaders headers = new HttpHeaders();
 
-                List<Securities> securities = securityRepository.findAll();
-                if (securities.size() > 0) {
-                    headers.set("Authorization", "Bearer " + securities.get(0).getAccessToken());
+                    List<Securities> securities = securityRepository.findAll();
+                    if (securities.size() > 0) {
+                        headers.set("Authorization", "Bearer " + securities.get(0).getAccessToken());
 
-                    ResponseEntity<UserData> response = restTemplate.exchange(
-                            "https://api.twitch.tv/helix/users?login=" + configs.get(0).getBroadcasterChannelName(),
-                            HttpMethod.GET,
-                            new HttpEntity<>(headers),
-                            UserData.class
-                    );
-
-                    UserData broadcasterUserData = response.getBody();
-
-                    if (broadcasterUserData != null && broadcasterUserData.getData() != null &&
-                            broadcasterUserData.getData().size() > 0) {
-                        ResponseEntity<ModeratorsData> moderatorsResponse = restTemplate.exchange(
-                                "https://api.twitch.tv/helix/moderation/moderators?broadcaster_id=" +
-                                        broadcasterUserData.getData().get(0).getId(),
+                        ResponseEntity<UserData> response = restTemplate.exchange(
+                                "https://api.twitch.tv/helix/users?login=" + configs.get(0).getBroadcasterChannelName(),
                                 HttpMethod.GET,
                                 new HttpEntity<>(headers),
-                                ModeratorsData.class
+                                UserData.class
                         );
 
-                        ModeratorsData moderators = moderatorsResponse.getBody();
-                        if (moderators != null) {
-                            for (int i = 0; i < moderators.getData().size(); i++) {
-                                if (moderators.getData().get(i).getUser_id().equals(twitchUser.getId())) {
-                                    return true;
+                        UserData broadcasterUserData = response.getBody();
+
+                        if (broadcasterUserData != null && broadcasterUserData.getData() != null &&
+                                broadcasterUserData.getData().size() > 0) {
+                            ResponseEntity<ModeratorsData> moderatorsResponse = restTemplate.exchange(
+                                    "https://api.twitch.tv/helix/moderation/moderators?broadcaster_id=" +
+                                            broadcasterUserData.getData().get(0).getId(),
+                                    HttpMethod.GET,
+                                    new HttpEntity<>(headers),
+                                    ModeratorsData.class
+                            );
+
+                            ModeratorsData moderators = moderatorsResponse.getBody();
+                            if (moderators != null) {
+                                for (int i = 0; i < moderators.getData().size(); i++) {
+                                    if (moderators.getData().get(i).getUser_id().equals(twitchUser.getId())) {
+                                        return true;
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+        } catch (Exception e) {
+
         }
 
         return false;

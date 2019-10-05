@@ -2,6 +2,7 @@ import React from 'react'
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button} from '@material-ui/core'
 import {translate} from 'react-translate'
 import {deleteCustomCommand} from '../../requests/requests'
+import queryString from 'query-string'
 
 
 class DeleteCustomCommandDialog extends React.Component {
@@ -11,11 +12,21 @@ class DeleteCustomCommandDialog extends React.Component {
   }
 
   handleDelete() {
-    deleteCustomCommand(this.props.customCommandId)
-      .then(res => {
-        this.props.setOpen(false)
-        this.props.reload()
-      })
+    const parsed = queryString.parse(window.location.hash)
+    let accessToken = parsed.access_token
+    if (!accessToken) {
+      accessToken = localStorage.getItem('accessToken')
+    }
+    if (accessToken) {
+      localStorage.setItem('accessToken', accessToken)
+      deleteCustomCommand(this.props.customCommandId, accessToken)
+        .then(res => {
+          if (res.status === 200) {
+            this.props.setOpen(false)
+            this.props.reload()
+          }
+        })
+    }
   }
 
   render() {

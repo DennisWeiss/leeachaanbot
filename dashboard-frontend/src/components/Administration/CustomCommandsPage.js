@@ -1,13 +1,14 @@
 import React from 'react'
 import {getAllCustomCommands} from '../../requests/requests'
-import {Paper, Table, TableBody, TableCell, TableHead, TableRow} from '@material-ui/core'
+import {Paper, Table, TableBody, TableCell, TableHead, TableRow, Button} from '@material-ui/core'
 import numeral from 'numeral'
 import {translate} from 'react-translate'
 import Icon from '@material-ui/core/Icon'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faPen, faTrash} from '@fortawesome/free-solid-svg-icons'
+import {faPen, faTrash, faPlusCircle, faCheck} from '@fortawesome/free-solid-svg-icons'
 import './CustomCommandsPage.scss'
 import DeleteCustomCommandDialog from './DeleteCustomCommandDialog'
+import AddCustomCommandDialog from './AddCustomCommandDialog'
 
 
 class CustomCommandsPage extends React.Component {
@@ -15,6 +16,7 @@ class CustomCommandsPage extends React.Component {
   state = {
     customCommands: [],
     deleteDialogOpen: false,
+    addDialogOpen: false,
     customCommandId: null
   }
 
@@ -45,17 +47,28 @@ class CustomCommandsPage extends React.Component {
 
   setDeleteDialogOpen = deleteDialogOpen => this.setState({deleteDialogOpen})
 
+  setAddDialogOpen = addDialogOpen => this.setState({addDialogOpen})
+
   render() {
     const {t} = this.props
 
     return (
       <>
+        <AddCustomCommandDialog
+          open={this.state.addDialogOpen}
+          setOpen={this.setAddDialogOpen.bind(this)}
+          reload={this.reload.bind(this)}
+        />
         <DeleteCustomCommandDialog
           open={this.state.deleteDialogOpen}
           setOpen={this.setDeleteDialogOpen.bind(this)}
           reload={this.reload.bind(this)}
           customCommandId={this.state.customCommandId}
         />
+        <Button variant='contained' color='primary' style={{marginBottom: 15}} onClick={() => this.setAddDialogOpen(true)}>
+          <span className='addCustomCommandButtonIcon'><FontAwesomeIcon icon={faPlusCircle}/></span>
+          {t('ADD_CUSTOM_COMMAND')}
+        </Button>
         <div>
           <Paper>
             <Table>
@@ -78,7 +91,7 @@ class CustomCommandsPage extends React.Component {
                         {customCommand.response}
                       </TableCell>
                       <TableCell>
-                        {customCommand.showTwitchHandle && <Icon color='primary'>check</Icon>}
+                        {customCommand.showTwitchHandle && <span className='showTwitchHandleIcon'><FontAwesomeIcon icon={faCheck}/></span>}
                       </TableCell>
                       <TableCell align='right'>
                         <div className='actionItems'>

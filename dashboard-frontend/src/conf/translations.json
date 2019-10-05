@@ -33,13 +33,23 @@
     "CustomCommandsPage": {
       "COMMAND_HANDLES": "Command handles",
       "RESPONSE": "Response",
-      "SHOW_TWITCH_HANDLE": "Show Twitch handle"
+      "SHOW_TWITCH_HANDLE": "Show Twitch handle",
+      "ADD_CUSTOM_COMMAND": "Add custom command"
     },
     "DeleteCustomCommandDialog": {
       "TITLE": "Delete custom command",
       "DELETION_WARNING": "............",
       "CANCEL": "Cancel",
       "DELETE": "Delete"
+    },
+    "AddCustomCommandDialog": {
+      "TITLE": "Add Custom Command",
+      "COMMAND_HANDLES": "Command handles",
+      "RESPONSE": "Response",
+      "SHOW_TWITCH_HANDLE": "Show Twitch handle (@username) before response",
+      "CANCEL": "Cancel",
+      "ADD_CUSTOM_COMMAND": "Add custom command",
+      "ADDED_CUSTOM_COMMAND_SUCCESSFULLY": "Added custom command successfully"
     }
   },
   "de": {
@@ -76,13 +86,23 @@
     "CustomCommandsPage": {
       "COMMAND_HANDLES": "Befehle",
       "RESPONSE": "Antwort",
-      "SHOW_TWITCH_HANDLE": "Zeige Twitch Namen"
+      "SHOW_TWITCH_HANDLE": "Zeige Twitch Namen",
+      "ADD_CUSTOM_COMMAND": "Befehl hinzufügen"
     },
     "DeleteCustomCommandDialog": {
       "TITLE": "Lösche benutzerdefinierten Befehl",
       "DELETION_WARNING": "............",
       "CANCEL": "Abbrechen",
       "DELETE": "Löschen"
+    },
+    "AddCustomCommandDialog": {
+      "TITLE": "Add Custom Command",
+      "COMMAND_HANDLES": "Command handles",
+      "RESPONSE": "Response",
+      "SHOW_TWITCH_HANDLE": "Zeige Twitch Namen (@username) vor Antwort",
+      "CANCEL": "Cancel",
+      "ADD_CUSTOM_COMMAND": "Add custom command",
+      "ADDED_CUSTOM_COMMAND_SUCCESSFULLY": "Befehl erfolgreich hinzugefügt"
     }
   }
 }

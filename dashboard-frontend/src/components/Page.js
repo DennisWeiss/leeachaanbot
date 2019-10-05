@@ -28,6 +28,7 @@ import BotSettingsPage from './Administration/BotSettingsPage'
 import InsufficientPermission from './InsufficientPermissions'
 import LoggedInAsAdministrator from './LoggedInAsAdministrator'
 import CustomCommandsPage from './Administration/CustomCommandsPage'
+import './Page.scss'
 
 
 const drawerWidth = 240
@@ -81,7 +82,7 @@ const Page = ({t, selectPage, selectedPage, loggedInUser}) => {
       <AppBar position='fixed' className={classes.appBar}>
         <Toolbar>
           <span style={{marginRight: 10}}><img src='leea-emote-128.png' width={32}/></span>
-          <h3>LeeaChaanBot Dashboard</h3>
+          <h3 className='appTitle'>LeeaChaanBot Dashboard</h3>
           {!loggedInUser && <LoginButton/>}
           {loggedInUser && <UserLoggedInfo loggedInUser={loggedInUser}/>}
         </Toolbar>

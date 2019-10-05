@@ -1,5 +1,13 @@
 import React from 'react'
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, IconButton} from '@material-ui/core'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Snackbar,
+  IconButton
+} from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import {translate} from 'react-translate'
 import {Select, Input, Checkbox} from 'antd'

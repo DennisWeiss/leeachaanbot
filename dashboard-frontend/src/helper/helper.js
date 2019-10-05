@@ -19,8 +19,6 @@ const round = (digits, fixedDecimals) => number => {
   return rounded.toString()
 }
 
-// TODO: proper implementation
-const hasAdministrationRights = userId => userId === '61270112'
 
 
-export {round, hasAdministrationRights}
+export {round}

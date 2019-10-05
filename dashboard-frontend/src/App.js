@@ -4,7 +4,8 @@ import Page from './components/Page'
 import {TranslatorProvider} from 'react-translate'
 import translations from './conf/translations'
 import queryString from 'query-string'
-import {currentUserInfo} from './requests/requests'
+import {currentUserInfo, hasAdministrationRights} from './requests/requests'
+import PermissionsContext from './context/PermissionsContext'
 
 
 class App extends React.Component {
@@ -13,7 +14,8 @@ class App extends React.Component {
     this.state = {
       locale: 'en',
       selectedPage: 'POINTS_LEADERBOARD',
-      loggedInUser: null
+      loggedInUser: null,
+      hasAdministrationRights: false
     }
   }
 
@@ -34,6 +36,13 @@ class App extends React.Component {
           }
         })
         .catch(err => localStorage.removeItem('accessToken'))
+
+      hasAdministrationRights(accessToken)
+        .then(res => {
+          if (res.data) {
+            this.setState({hasAdministrationRights: res.data.hasRights})
+          }
+        })
     }
   }
 
@@ -43,8 +52,10 @@ class App extends React.Component {
     console.log(this.state.loggedInUser)
     return (
       <TranslatorProvider translations={translations[this.state.locale]}>
+        <PermissionsContext.Provider value={this.state.hasAdministrationRights}>
           <Page selectedPage={this.state.selectedPage} selectPage={this.selectPage.bind(this)}
                 loggedInUser={this.state.loggedInUser}/>
+        </PermissionsContext.Provider>
       </TranslatorProvider>
     )
   }

@@ -37,6 +37,12 @@ const updateCustomCommand = (customCommand, accessToken) => axios.post(`${conf.c
   }
 })
 
+const hasAdministrationRights = accessToken => axios.post(`${conf.permissionsEndpoint}/administration`, null, {
+  headers: {
+    Authorization: accessToken
+  }
+})
+
 export {
   fetchPointsLeadeboard,
   fetchDonationLeaderboard,
@@ -46,5 +52,6 @@ export {
   getAllCustomCommands,
   deleteCustomCommand,
   addCustomCommand,
-  updateCustomCommand
+  updateCustomCommand,
+  hasAdministrationRights
 }

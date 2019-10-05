@@ -9,14 +9,17 @@ import {faPen, faTrash, faPlusCircle, faCheck} from '@fortawesome/free-solid-svg
 import './CustomCommandsPage.scss'
 import DeleteCustomCommandDialog from './DeleteCustomCommandDialog'
 import AddCustomCommandDialog from './AddCustomCommandDialog'
+import EditCustomCommandDialog from './EditCustomCommandDialog'
 
 
 class CustomCommandsPage extends React.Component {
 
   state = {
     customCommands: [],
+    customCommandToEdit: {},
     deleteDialogOpen: false,
     addDialogOpen: false,
+    editDialogOpen: false,
     customCommandId: null
   }
 
@@ -35,7 +38,13 @@ class CustomCommandsPage extends React.Component {
 
 
   editCustomCommand(id) {
-
+    const customCommand = this.state.customCommands.find(customCommand => customCommand._id === id)
+    if (customCommand) {
+      this.setState({
+        customCommandToEdit: customCommand,
+        editDialogOpen: true
+      })
+    }
   }
 
   deleteCustomCommand(customCommandId) {
@@ -49,6 +58,8 @@ class CustomCommandsPage extends React.Component {
 
   setAddDialogOpen = addDialogOpen => this.setState({addDialogOpen})
 
+  setEditDialogOpen = editDialogOpen => this.setState({editDialogOpen})
+
   render() {
     const {t} = this.props
 
@@ -59,13 +70,20 @@ class CustomCommandsPage extends React.Component {
           setOpen={this.setAddDialogOpen.bind(this)}
           reload={this.reload.bind(this)}
         />
+        <EditCustomCommandDialog
+          customCommand={this.state.customCommandToEdit}
+          open={this.state.editDialogOpen}
+          setOpen={this.setEditDialogOpen.bind(this)}
+          reload={this.reload.bind(this)}
+        />
         <DeleteCustomCommandDialog
           open={this.state.deleteDialogOpen}
           setOpen={this.setDeleteDialogOpen.bind(this)}
           reload={this.reload.bind(this)}
           customCommandId={this.state.customCommandId}
         />
-        <Button variant='contained' color='primary' style={{marginBottom: 15}} onClick={() => this.setAddDialogOpen(true)}>
+        <Button variant='contained' color='primary' style={{marginBottom: 15}}
+                onClick={() => this.setAddDialogOpen(true)}>
           <span className='addCustomCommandButtonIcon'><FontAwesomeIcon icon={faPlusCircle}/></span>
           {t('ADD_CUSTOM_COMMAND')}
         </Button>
@@ -91,7 +109,8 @@ class CustomCommandsPage extends React.Component {
                         {customCommand.response}
                       </TableCell>
                       <TableCell>
-                        {customCommand.showTwitchHandle && <span className='showTwitchHandleIcon'><FontAwesomeIcon icon={faCheck}/></span>}
+                        {customCommand.showTwitchHandle &&
+                        <span className='showTwitchHandleIcon'><FontAwesomeIcon icon={faCheck}/></span>}
                       </TableCell>
                       <TableCell align='right'>
                         <div className='actionItems'>

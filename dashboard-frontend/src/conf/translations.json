@@ -50,6 +50,15 @@
       "CANCEL": "Cancel",
       "ADD_CUSTOM_COMMAND": "Add custom command",
       "ADDED_CUSTOM_COMMAND_SUCCESSFULLY": "Added custom command successfully"
+    },
+    "EditCustomCommandDialog": {
+      "TITLE": "Edit Custom Command",
+      "COMMAND_HANDLES": "Command handles",
+      "RESPONSE": "Response",
+      "SHOW_TWITCH_HANDLE": "Show Twitch handle (@username) before response",
+      "CANCEL": "Cancel",
+      "ADD_CUSTOM_COMMAND": "Edit custom command",
+      "EDITED_CUSTOM_COMMAND_SUCCESSFULLY": "Edited custom command successfully"
     }
   },
   "de": {
@@ -96,13 +105,22 @@
       "DELETE": "Löschen"
     },
     "AddCustomCommandDialog": {
-      "TITLE": "Add Custom Command",
-      "COMMAND_HANDLES": "Command handles",
-      "RESPONSE": "Response",
+      "TITLE": "Befehl hinzufügen",
+      "COMMAND_HANDLES": "Befehle",
+      "RESPONSE": "Antwort",
       "SHOW_TWITCH_HANDLE": "Zeige Twitch Namen (@username) vor Antwort",
-      "CANCEL": "Cancel",
-      "ADD_CUSTOM_COMMAND": "Add custom command",
+      "CANCEL": "Abbrechen",
+      "ADD_CUSTOM_COMMAND": "Befehl hinzufügen",
       "ADDED_CUSTOM_COMMAND_SUCCESSFULLY": "Befehl erfolgreich hinzugefügt"
+    },
+    "EditCustomCommandDialog": {
+      "TITLE": "Befehl bearbeiten",
+      "COMMAND_HANDLES": "Befehle",
+      "RESPONSE": "Antwort",
+      "SHOW_TWITCH_HANDLE": "Zeige Twitch Namen (@username) vor Antwort",
+      "CANCEL": "Abbrechen",
+      "ADD_CUSTOM_COMMAND": "Befehl bearbeiten",
+      "EDITED_CUSTOM_COMMAND_SUCCESSFULLY": "Befehl erfolgreich bearbeitet"
     }
   }
 }

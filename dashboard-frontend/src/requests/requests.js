@@ -23,6 +23,7 @@ const deleteCustomCommand = id => axios.delete(`${conf.customCommandEndpoint}/de
 
 const addCustomCommand = customCommand => axios.post(`${conf.customCommandEndpoint}/add`, customCommand)
 
+const updateCustomCommand = customCommand => axios.post(`${conf.customCommandEndpoint}/update`, customCommand)
 
 export {
   fetchPointsLeadeboard,
@@ -32,5 +33,6 @@ export {
   currentUserInfo,
   getAllCustomCommands,
   deleteCustomCommand,
-  addCustomCommand
+  addCustomCommand,
+  updateCustomCommand
 }

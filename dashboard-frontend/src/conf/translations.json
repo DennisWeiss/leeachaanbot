@@ -156,6 +156,25 @@
     "LanguageSelector": {
       "EN_LONG": "Englisch",
       "DE_LONG": "Deutsch"
+    },
+    "BotSettingsPage": {
+      "GENERAL": "Allgemein",
+      "CURRENCY": "Währung",
+      "USERS": "Nutzer",
+      "CLIENT_ID": "Client ID",
+      "CLIENT_SECRET": "Client Secret",
+      "ACCESS_TOKEN": "Access Token",
+      "REFRESH_TOKEN": "Refresh Token",
+      "BROADCASTER_CHANNEL_NAME": "Broadcaster-Kanalname",
+      "BOT_USERNAME": "Bot Username",
+      "BOT_OAUTH_PASSWORD": "Bot OAuth Passwort",
+      "DONATION_CURRENCY": "Spendenwährung",
+      "CURRENCY_NAME_SINGULAR": "Währungsname (Singular)",
+      "CURRENCY_NAME_PLURAL": "Währungsname (Plural)",
+      "ITERATION_CYCLE": "Iterationszyklus (sec)",
+      "POINTS_PER_VIEW_ITERATION": "Punkte pro Iteration",
+      "FOLLOWER_MULTIPLIER": "Follower Multiplikator",
+      "SUBSCRIBER_MULTIPLIER": "Abbonenten Multiplikator"
     }
   }
 }

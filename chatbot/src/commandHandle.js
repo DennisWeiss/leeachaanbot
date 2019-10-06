@@ -261,10 +261,6 @@ function handleCommand(client, target, context, cmd) {
         })
       })
 
-    const test = new Command()
-
-    test.save().then(() => {})
-
     switch (cmd) {
       case '!p':
         dangos(client, target, context['user-id'], context.username)

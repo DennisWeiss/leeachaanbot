@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "11414c826efbcbe806cdee69548f7dc6",
+    "revision": "b348cd93036d10bf0bc7f508dada59c0",
     "url": "/leeachaanbot/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/leeachaanbot/static/css/2.653462cc.chunk.css"
   },
   {
-    "revision": "11508a8b1395038768b0",
+    "revision": "03b6ba30168f0c38a7ea",
     "url": "/leeachaanbot/static/css/main.24289d23.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/leeachaanbot/static/js/2.02d218ce.chunk.js"
   },
   {
-    "revision": "11508a8b1395038768b0",
-    "url": "/leeachaanbot/static/js/main.10a5bfe4.chunk.js"
+    "revision": "03b6ba30168f0c38a7ea",
+    "url": "/leeachaanbot/static/js/main.7b645500.chunk.js"
   },
   {
     "revision": "9ca6709646541bdc14bf",

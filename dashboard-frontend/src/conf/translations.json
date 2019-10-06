@@ -67,6 +67,25 @@
     "LanguageSelector": {
       "EN_LONG": "English",
       "DE_LONG": "German"
+    },
+    "BotSettingsPage": {
+      "GENERAL": "General",
+      "CURRENCY": "Currency",
+      "USERS": "Users",
+      "CLIENT_ID": "Client ID",
+      "CLIENT_SECRET": "Client secret",
+      "ACCESS_TOKEN": "Access token",
+      "REFRESH_TOKEN": "Refresh token",
+      "BROADCASTER_CHANNEL_NAME": "Broadcaster channel name",
+      "BOT_USERNAME": "Bot username",
+      "BOT_OAUTH_PASSWORD": "Bot OAuth password",
+      "DONATION_CURRENCY": "Donation currency",
+      "CURRENCY_NAME_SINGULAR": "Currency name (singular)",
+      "CURRENCY_NAME_PLURAL": "Currency name (plural)",
+      "ITERATION_CYCLE": "Iteration cycle (sec)",
+      "POINTS_PER_VIEW_ITERATION": "Points per view iteration",
+      "FOLLOWER_MULTIPLIER": "Follower multiplier",
+      "SUBSCRIBER_MULTIPLIER": "Subscriber multiplier"
     }
   },
   "de": {

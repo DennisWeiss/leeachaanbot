@@ -187,7 +187,7 @@ const Page = ({t, selectPage, selectedPage, loggedInUser, locale, changeLocale})
                 selectedPage === 'BITS_LEADERBOARD' && <BitsLeaderboard/>
               }
               {
-                selectedPage === 'BOT_SETTINGS' && loggedInUser && hasAdministrationRights && <BotSettingsPage/>
+                selectedPage === 'BOT_SETTINGS' && (loggedInUser && hasAdministrationRights || true) && <BotSettingsPage/>
               }
               {
                 selectedPage === 'BOT_SETTINGS' && loggedInUser && !hasAdministrationRights && <InsufficientPermission/>

@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -22,11 +23,14 @@ public class PermissionsService {
 
     private final ConfigRepository configRepository;
     private final SecurityRepository securityRepository;
+    private final RefreshTwitchApiTokenService refreshTwitchApiTokenService;
 
     @Autowired
-    public PermissionsService(ConfigRepository configRepository, SecurityRepository securityRepository) {
+    public PermissionsService(ConfigRepository configRepository, SecurityRepository securityRepository,
+                              RefreshTwitchApiTokenService refreshTwitchApiTokenService) {
         this.configRepository = configRepository;
         this.securityRepository = securityRepository;
+        this.refreshTwitchApiTokenService = refreshTwitchApiTokenService;
     }
 
     public boolean hasAdministrationRights(String accessToken) {
@@ -50,33 +54,43 @@ public class PermissionsService {
                     if (securities.size() > 0) {
                         headers.set("Authorization", "Bearer " + securities.get(0).getAccessToken());
 
-                        ResponseEntity<UserData> response = restTemplate.exchange(
-                                "https://api.twitch.tv/helix/users?login=" + configs.get(0).getBroadcasterChannelName(),
-                                HttpMethod.GET,
-                                new HttpEntity<>(headers),
-                                UserData.class
-                        );
-
-                        UserData broadcasterUserData = response.getBody();
-
-                        if (broadcasterUserData != null && broadcasterUserData.getData() != null &&
-                                broadcasterUserData.getData().size() > 0) {
-                            ResponseEntity<ModeratorsData> moderatorsResponse = restTemplate.exchange(
-                                    "https://api.twitch.tv/helix/moderation/moderators?broadcaster_id=" +
-                                            broadcasterUserData.getData().get(0).getId(),
+                        try {
+                            ResponseEntity<UserData> response = restTemplate.exchange(
+                                    "https://api.twitch.tv/helix/users?login=" + configs.get(0).getBroadcasterChannelName(),
                                     HttpMethod.GET,
                                     new HttpEntity<>(headers),
-                                    ModeratorsData.class
+                                    UserData.class
                             );
 
-                            ModeratorsData moderators = moderatorsResponse.getBody();
-                            if (moderators != null) {
-                                for (int i = 0; i < moderators.getData().size(); i++) {
-                                    if (moderators.getData().get(i).getUser_id().equals(twitchUser.getId())) {
-                                        return true;
+                            if (response.getStatusCode().value() == 401) {
+                                refreshTwitchApiTokenService.refreshTwitchApiToken();
+                                return hasAdministrationRights(accessToken);
+                            }
+
+                            UserData broadcasterUserData = response.getBody();
+
+                            if (broadcasterUserData != null && broadcasterUserData.getData() != null &&
+                                    broadcasterUserData.getData().size() > 0) {
+                                ResponseEntity<ModeratorsData> moderatorsResponse = restTemplate.exchange(
+                                        "https://api.twitch.tv/helix/moderation/moderators?broadcaster_id=" +
+                                                broadcasterUserData.getData().get(0).getId(),
+                                        HttpMethod.GET,
+                                        new HttpEntity<>(headers),
+                                        ModeratorsData.class
+                                );
+
+                                ModeratorsData moderators = moderatorsResponse.getBody();
+                                if (moderators != null) {
+                                    for (int i = 0; i < moderators.getData().size(); i++) {
+                                        if (moderators.getData().get(i).getUser_id().equals(twitchUser.getId())) {
+                                            return true;
+                                        }
                                     }
                                 }
                             }
+                        } catch (RestClientException e) {
+                            refreshTwitchApiTokenService.refreshTwitchApiToken();
+                            return hasAdministrationRights(accessToken);
                         }
                     }
                 }

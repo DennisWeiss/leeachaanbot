@@ -7,6 +7,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import {translate} from 'react-translate'
 import numeral from 'numeral'
 import conf from '../../conf/conf'
+import LanguageSelector from '../util/LanguageSelector'
 
 
 const formatPoints = (score, nameSingular, namePlural) => `${numeral(score).format()} ${score === 1 ? nameSingular : namePlural}`

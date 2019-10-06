@@ -48,13 +48,20 @@ class App extends React.Component {
 
   selectPage = selectedPage => this.setState({selectedPage})
 
+  changeLocale = locale => this.setState({locale})
+
   render() {
     console.log(this.state.loggedInUser)
     return (
       <TranslatorProvider translations={translations[this.state.locale]}>
         <PermissionsContext.Provider value={this.state.hasAdministrationRights}>
-          <Page selectedPage={this.state.selectedPage} selectPage={this.selectPage.bind(this)}
-                loggedInUser={this.state.loggedInUser}/>
+          <Page
+            selectedPage={this.state.selectedPage}
+            selectPage={this.selectPage.bind(this)}
+            loggedInUser={this.state.loggedInUser}
+            locale={this.state.locale}
+            changeLocale={this.changeLocale.bind(this)}
+          />
         </PermissionsContext.Provider>
       </TranslatorProvider>
     )

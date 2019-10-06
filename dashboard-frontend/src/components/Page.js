@@ -31,6 +31,7 @@ import LoggedInAsAdministrator from './LoggedInAsAdministrator'
 import CustomCommandsPage from './Administration/CustomCommandsPage'
 import PermissionsContext from '../context/PermissionsContext'
 import './Page.scss'
+import LanguageSelector from './util/LanguageSelector'
 
 
 const drawerWidth = 240
@@ -74,16 +75,16 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Page = ({t, selectPage, selectedPage, loggedInUser}) => {
+const Page = ({t, selectPage, selectedPage, loggedInUser, locale, changeLocale}) => {
 
   const classes = useStyles()
   const theme = useTheme()
 
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(false)
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+    setMobileOpen(!mobileOpen)
+  }
 
   const drawer =
     <div>
@@ -132,6 +133,9 @@ const Page = ({t, selectPage, selectedPage, loggedInUser}) => {
           </IconButton>
           <span style={{marginRight: 10}}><img src='leea-emote-128.png' width={32}/></span>
           <h3 className='appTitle'>LeeaChaanBot Dashboard</h3>
+          <div className='languageSelectorDiv'>
+            <LanguageSelector locale={locale} changeLocale={changeLocale}/>
+          </div>
           {!loggedInUser && <LoginButton/>}
           {loggedInUser && <UserLoggedInfo loggedInUser={loggedInUser}/>}
         </Toolbar>

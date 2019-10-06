@@ -62,6 +62,10 @@
     },
     "UserLoggedInfo": {
       "LOGOUT": "Logout"
+    },
+    "LanguageSelector": {
+      "EN_LONG": "English",
+      "DE_LONG": "German"
     }
   },
   "de": {
@@ -127,6 +131,10 @@
     },
     "UserLoggedInfo": {
       "LOGOUT": "Abmelden"
+    },
+    "LanguageSelector": {
+      "EN_LONG": "Englisch",
+      "DE_LONG": "Deutsch"
     }
   }
 }

@@ -5,5 +5,5 @@
   "permissionsEndpoint": "https://gr-esports.de:11002/permissions",
   "pointsEndpoint": "https://gr-esports.de:11002/points",
   "clientId": "w2wiz22s7vnnxi03f7qyt3dbal8mlj",
-  "hostUri": "http://localhost:11001"
+  "hostUri": "https://dennisweiss.github.io/leeachaanbot"
 }

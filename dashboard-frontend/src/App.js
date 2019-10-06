@@ -1,5 +1,5 @@
 import React from 'react'
-import './App.css'
+import './App.scss'
 import Page from './components/Page'
 import {TranslatorProvider} from 'react-translate'
 import translations from './conf/translations'

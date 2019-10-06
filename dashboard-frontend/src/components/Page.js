@@ -132,7 +132,7 @@ const Page = ({t, selectPage, selectedPage, loggedInUser, locale, changeLocale})
             <MenuIcon onClick={handleDrawerToggle}/>
           </IconButton>
           <span style={{marginRight: 10}}><img src='leea-emote-128.png' width={32}/></span>
-          <h3 className='appTitle'>LeeaChaanBot Dashboard</h3>
+          <h3 className='appTitle'>{t('TITLE')}</h3>
           <div className='languageSelectorDiv'>
             <LanguageSelector locale={locale} changeLocale={changeLocale}/>
           </div>

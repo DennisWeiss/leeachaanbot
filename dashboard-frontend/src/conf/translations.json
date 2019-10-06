@@ -8,7 +8,8 @@
       "BITS_LEADERBOARD": "Bits Leaderboard",
       "ADMINISTRATION": "Administration",
       "BOT_SETTINGS": "Bot Settings",
-      "CUSTOM_COMMANDS": "Custom Commands"
+      "CUSTOM_COMMANDS": "Custom Commands",
+      "TITLE": "LeeaChaanBot"
     },
     "PointsLeaderboard": {
       "TITLE": "Points Leaderboard",
@@ -38,7 +39,7 @@
     },
     "DeleteCustomCommandDialog": {
       "TITLE": "Delete custom command",
-      "DELETION_WARNING": "............",
+      "DELETION_WARNING": "Are you sure you want to delete this command?",
       "CANCEL": "Cancel",
       "DELETE": "Delete"
     },
@@ -70,14 +71,15 @@
   },
   "de": {
     "locale": "de",
-    "Page":{
+    "Page": {
       "LEADERBOARDS": "Bestenlisten",
       "POINTS_LEADERBOARD": "Punkteliste",
       "DONATION_LEADERBOARD": "Spendenliste",
       "BITS_LEADERBOARD": "Bitsliste",
       "ADMINISTRATION": "Administrierung",
       "BOT_SETTINGS": "Bot Einstellungen",
-      "CUSTOM_COMMANDS": "Benutzerdefinierte Befehle"
+      "CUSTOM_COMMANDS": "Benutzerdefinierte Befehle",
+      "TITLE": "LeeaChaanBot"
     },
     "PointsLeaderboard": {
       "TITLE": "Punkteliste",
@@ -107,7 +109,7 @@
     },
     "DeleteCustomCommandDialog": {
       "TITLE": "Lösche benutzerdefinierten Befehl",
-      "DELETION_WARNING": "............",
+      "DELETION_WARNING": "Bist du sicher, dass du diesen Befehl löschen möchtest?",
       "CANCEL": "Abbrechen",
       "DELETE": "Löschen"
     },

@@ -6,6 +6,7 @@ server:
     key-store-password: '**************'
     key-alias: MyAlias
 
+
 spring:
   data:
     mongodb:

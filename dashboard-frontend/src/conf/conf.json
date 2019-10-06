@@ -1,9 +1,9 @@
 {
-  "leaderboardEndpoint": "http://gr-esports.de:11000/leaderboard",
-  "configEndpoint": "http://gr-esports.de:11000/config",
-  "customCommandEndpoint": "http://gr-esports.de:11000/customcommands",
-  "permissionsEndpoint": "http://gr-esports.de:11000/permissions",
-  "pointsEndpoint": "http://gr-esports.de:11000/points",
+  "leaderboardEndpoint": "https://gr-esports.de:11002/leaderboard",
+  "configEndpoint": "https://gr-esports.de:11002/config",
+  "customCommandEndpoint": "https://gr-esports.de:11002/customcommands",
+  "permissionsEndpoint": "https://gr-esports.de:11002/permissions",
+  "pointsEndpoint": "https://gr-esports.de:11002/points",
   "clientId": "w2wiz22s7vnnxi03f7qyt3dbal8mlj",
   "hostUri": "http://localhost:11001"
 }

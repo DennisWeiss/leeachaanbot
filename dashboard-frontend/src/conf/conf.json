@@ -1,8 +1,9 @@
 {
   "leaderboardEndpoint": "http://gr-esports.de:11000/leaderboard",
   "configEndpoint": "http://gr-esports.de:11000/config",
-  "customCommandEndpoint": "http://localhost:11000/customcommands",
-  "permissionsEndpoint": "http://localhost:11000/permissions",
+  "customCommandEndpoint": "http://gr-esports.de:11000/customcommands",
+  "permissionsEndpoint": "http://gr-esports.de:11000/permissions",
+  "pointsEndpoint": "http://gr-esports.de:11000/points",
   "clientId": "w2wiz22s7vnnxi03f7qyt3dbal8mlj",
   "hostUri": "http://localhost:11001"
 }

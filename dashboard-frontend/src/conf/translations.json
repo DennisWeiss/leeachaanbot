@@ -59,6 +59,9 @@
       "CANCEL": "Cancel",
       "ADD_CUSTOM_COMMAND": "Edit custom command",
       "EDITED_CUSTOM_COMMAND_SUCCESSFULLY": "Edited custom command successfully"
+    },
+    "UserLoggedInfo": {
+      "LOGOUT": "Logout"
     }
   },
   "de": {
@@ -121,6 +124,9 @@
       "CANCEL": "Abbrechen",
       "ADD_CUSTOM_COMMAND": "Befehl bearbeiten",
       "EDITED_CUSTOM_COMMAND_SUCCESSFULLY": "Befehl erfolgreich bearbeitet"
+    },
+    "UserLoggedInfo": {
+      "LOGOUT": "Abmelden"
     }
   }
 }

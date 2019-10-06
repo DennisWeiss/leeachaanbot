@@ -43,6 +43,8 @@ const hasAdministrationRights = accessToken => axios.post(`${conf.permissionsEnd
   }
 })
 
+const fetchPointsScore = userId => axios.get(`${conf.pointsEndpoint}/user/${userId}`)
+
 export {
   fetchPointsLeadeboard,
   fetchDonationLeaderboard,
@@ -53,5 +55,6 @@ export {
   deleteCustomCommand,
   addCustomCommand,
   updateCustomCommand,
-  hasAdministrationRights
+  hasAdministrationRights,
+  fetchPointsScore
 }

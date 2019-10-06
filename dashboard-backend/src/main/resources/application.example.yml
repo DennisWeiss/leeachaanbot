@@ -1,0 +1,14 @@
+server:
+  port: 11000
+  ssl:
+    key-store-type: PKCS12
+    key-store: keystore.p12
+    key-store-password: '**************'
+    key-alias: MyAlias
+
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: leeachaanbot

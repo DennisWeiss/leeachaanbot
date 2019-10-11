@@ -42,8 +42,8 @@ class DeleteCustomCommandDialog extends React.Component {
             {t('DELETION_WARNING')}
           </DialogContentText>
           <DialogActions>
-            <Button onClick={this.handleClose.bind(this)} color='secondary'>{t('CANCEL')}</Button>
-            <Button onClick={this.handleDelete.bind(this)} color='error'>{t('DELETE')}</Button>
+            <Button onClick={this.handleClose.bind(this)} >{t('CANCEL')}</Button>
+            <Button onClick={this.handleDelete.bind(this)} color='secondary'>{t('DELETE')}</Button>
           </DialogActions>
         </DialogContent>
       </Dialog>

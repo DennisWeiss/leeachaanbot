@@ -1,5 +1,5 @@
 import React from 'react'
-import {Paper, Tabs, Tab, Grid} from '@material-ui/core'
+import {Button, Paper, Tabs, Tab, Grid} from '@material-ui/core'
 import {Input, InputNumber, Select} from 'antd'
 import {translate} from 'react-translate'
 import TabPanel from '../util/TabPanel'
@@ -7,18 +7,45 @@ import './BotSettingsPage.scss'
 import {fetchSecuredConfig} from '../../requests/requests'
 
 
+const objEqual = (a, b) => {
+  console.log(a, b)
+  for (const obj of [a, b]) {
+    for (const key of Object.keys(obj)) {
+      if (typeof a[key] === 'object') {
+        if (typeof b[key] === 'object') {
+          if (!objEqual(a[key], b[key])) {
+            return false
+          }
+        } else {
+          return false
+        }
+      } else {
+        if (a[key] !== b[key]) {
+          return false
+        }
+      }
+    }
+  }
+  return true
+}
+
+
 class BotSettingsPage extends React.Component {
 
   state = {
     selectedTab: 0,
-    config: {}
+    config: {},
+    initialConfig: {}
   }
 
   componentDidMount() {
     fetchSecuredConfig(this.props.accessToken)
       .then(res => {
         if (res.data) {
-          this.setState({config: res.data})
+          this.setState({
+            config: {...res.data},
+            initialConfig: {...res.data}
+          })
         }
       })
   }
@@ -36,13 +63,17 @@ class BotSettingsPage extends React.Component {
 
   changeCurrencyFieldValue = field => event => {
     const config = {...this.state.config}
-    config.currency[field] = event.target.value
-    this.setState({config})
+    const currency = {...config.currency}
+    currency[field] = event.target.value
+    config.currency = currency
+    this.setState({config}, () => console.log(this.state))
   }
 
   changeCurrencyFieldValueNumber = field => value => {
     const config = {...this.state.config}
-    config.currency[field] = value
+    const currency = {...config.currency}
+    currency[field] = value
+    config.currency = currency
     this.setState({config})
   }
 
@@ -50,127 +81,149 @@ class BotSettingsPage extends React.Component {
     const {t} = this.props
 
     return (
-      <Paper className='botSettingsPagePaper'>
-        <Tabs
-          value={this.state.selectedTab}
-          onChange={this.handleTabChange.bind(this)}
-        >
-          <Tab label={t('GENERAL')}/>
-          <Tab label={t('CURRENCY')}/>
-          <Tab label={t('USERS')}/>
-        </Tabs>
-        <TabPanel value={this.state.selectedTab} index={0}>
-          <Grid container spacing={3}>
-            <Grid item xs={6}>
-              {t('CLIENT_ID')}
+      <>
+        <Paper className='botSettingsPagePaper'>
+          <Tabs
+            value={this.state.selectedTab}
+            onChange={this.handleTabChange.bind(this)}
+          >
+            <Tab label={t('GENERAL')}/>
+            <Tab label={t('CURRENCY')}/>
+            <Tab label={t('USERS')}/>
+          </Tabs>
+          <TabPanel value={this.state.selectedTab} index={0}>
+            <Grid container spacing={3}>
+              <Grid item xs={6}>
+                {t('CLIENT_ID')}
+              </Grid>
+              <Grid item xs={6}>
+                <Input value={this.state.config.clientId} onChange={this.changeFieldValue('clientId').bind(this)}/>
+              </Grid>
+              <Grid item xs={6}>
+                {t('CLIENT_SECRET')}
+              </Grid>
+              <Grid item xs={6}>
+                <Input value={this.state.config.clientSecret}
+                       onChange={this.changeFieldValue('clientSecret').bind(this)}/>
+              </Grid>
+              <Grid item xs={6}>
+                {t('ACCESS_TOKEN')}
+              </Grid>
+              <Grid item xs={6}>
+                <Input value={this.state.config.accessToken}
+                       onChange={this.changeFieldValue('accessToken').bind(this)}/>
+              </Grid>
+              <Grid item xs={6}>
+                {t('REFRESH_TOKEN')}
+              </Grid>
+              <Grid item xs={6}>
+                <Input value={this.state.config.refreshToken}
+                       onChange={this.changeFieldValue('refreshToken').bind(this)}/>
+              </Grid>
+              <Grid item xs={6}>
+                {t('BROADCASTER_CHANNEL_NAME')}
+              </Grid>
+              <Grid item xs={6}>
+                <Input value={this.state.config.broadcasterChannelName}
+                       onChange={this.changeFieldValue('broadcasterChannelName').bind(this)}/>
+              </Grid>
+              <Grid item xs={6}>
+                {t('BOT_USERNAME')}
+              </Grid>
+              <Grid item xs={6}>
+                <Input value={this.state.config.botUsername}
+                       onChange={this.changeFieldValue('botUsername').bind(this)}/>
+              </Grid>
+              <Grid item xs={6}>
+                {t('BOT_OAUTH_PASSWORD')}
+              </Grid>
+              <Grid item xs={6}>
+                <Input value={this.state.config.botOAuthPassword}
+                       onChange={this.changeFieldValue('botOAuthPassword').bind(this)}/>
+              </Grid>
+              <Grid item xs={6}>
+                {t('DONATION_CURRENCY')}
+              </Grid>
+              <Grid item xs={6}>
+                <Input value={this.state.config.donationCurrency}
+                       onChange={this.changeFieldValue('donationCurrency').bind(this)}/>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <Input value={this.state.config.clientId} onChange={this.changeFieldValue('clientId').bind(this)}/>
+          </TabPanel>
+          <TabPanel value={this.state.selectedTab} index={1}>
+            <Grid container spacing={3}>
+              <Grid item xs={6}>
+                {t('CURRENCY_NAME_SINGULAR')}
+              </Grid>
+              <Grid item xs={6}>
+                <Input value={this.state.config.currency && this.state.config.currency.nameSingular}
+                       onChange={this.changeCurrencyFieldValue('nameSingular').bind(this)}/>
+              </Grid>
+              <Grid item xs={6}>
+                {t('CURRENCY_NAME_PLURAL')}
+              </Grid>
+              <Grid item xs={6}>
+                <Input value={this.state.config.currency && this.state.config.currency.namePlural}
+                       onChange={this.changeCurrencyFieldValue('namePlural').bind(this)}/>
+              </Grid>
+              <Grid item xs={6}>
+                {t('ITERATION_CYCLE')}
+              </Grid>
+              <Grid item xs={6}>
+                <InputNumber min={1} value={this.state.config.currency && this.state.config.currency.iterationCycleInMs}
+                             onChange={this.changeCurrencyFieldValueNumber('iterationCycleInMs').bind(this)}/>
+              </Grid>
+              <Grid item xs={6}>
+                {t('POINTS_PER_VIEW_ITERATION')}
+              </Grid>
+              <Grid item xs={6}>
+                <InputNumber min={1}
+                             value={this.state.config.currency && this.state.config.currency.pointsPerViewIteration}
+                             onChange={this.changeCurrencyFieldValueNumber('pointsPerViewIteration').bind(this)}/>
+              </Grid>
+              <Grid item xs={6}>
+                {t('FOLLOWER_MULTIPLIER')}
+              </Grid>
+              <Grid item xs={6}>
+                <InputNumber min={1} value={this.state.config.currency && this.state.config.currency.followerMultiplier}
+                             onChange={this.changeCurrencyFieldValueNumber('followerMultiplier').bind(this)}/>
+              </Grid>
+              <Grid item xs={6}>
+                {t('SUBSCRIBER_MULTIPLIER')}
+              </Grid>
+              <Grid item xs={6}>
+                <InputNumber min={1}
+                             value={this.state.config.currency && this.state.config.currency.subscriberMultiplier}
+                             onChange={this.changeCurrencyFieldValueNumber('subscriberMultiplier').bind(this)}/>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              {t('CLIENT_SECRET')}
-            </Grid>
-            <Grid item xs={6}>
-              <Input value={this.state.config.clientSecret} onChange={this.changeFieldValue('clientSecret').bind(this)}/>
-            </Grid>
-            <Grid item xs={6}>
-              {t('ACCESS_TOKEN')}
-            </Grid>
-            <Grid item xs={6}>
-              <Input value={this.state.config.accessToken} onChange={this.changeFieldValue('accessToken').bind(this)}/>
-            </Grid>
-            <Grid item xs={6}>
-              {t('REFRESH_TOKEN')}
-            </Grid>
-            <Grid item xs={6}>
-              <Input value={this.state.config.refreshToken} onChange={this.changeFieldValue('refreshToken').bind(this)}/>
-            </Grid>
-            <Grid item xs={6}>
-              {t('BROADCASTER_CHANNEL_NAME')}
-            </Grid>
-            <Grid item xs={6}>
-              <Input value={this.state.config.broadcasterChannelName} onChange={this.changeFieldValue('broadcasterChannelName').bind(this)}/>
-            </Grid>
-            <Grid item xs={6}>
-              {t('BOT_USERNAME')}
-            </Grid>
-            <Grid item xs={6}>
-              <Input value={this.state.config.botUsername} onChange={this.changeFieldValue('botUsername').bind(this)}/>
-            </Grid>
-            <Grid item xs={6}>
-              {t('BOT_OAUTH_PASSWORD')}
-            </Grid>
-            <Grid item xs={6}>
-              <Input value={this.state.config.botOAuthPassword} onChange={this.changeFieldValue('botOAuthPassword').bind(this)}/>
-            </Grid>
-            <Grid item xs={6}>
-              {t('DONATION_CURRENCY')}
-            </Grid>
-            <Grid item xs={6}>
-              <Input value={this.state.config.donationCurrency} onChange={this.changeFieldValue('donationCurrency').bind(this)}/>
-            </Grid>
-          </Grid>
-        </TabPanel>
-        <TabPanel value={this.state.selectedTab} index={1}>
-          <Grid container spacing={3}>
-            <Grid item xs={6}>
-              {t('CURRENCY_NAME_SINGULAR')}
-            </Grid>
-            <Grid item xs={6}>
-              <Input value={this.state.config.currency && this.state.config.currency.nameSingular}
-                     onChange={this.changeCurrencyFieldValue('nameSingular').bind(this)}/>
-            </Grid>
-            <Grid item xs={6}>
-              {t('CURRENCY_NAME_PLURAL')}
-            </Grid>
-            <Grid item xs={6}>
-              <Input value={this.state.config.currency && this.state.config.currency.namePlural}
-                     onChange={this.changeCurrencyFieldValue('namePlural').bind(this)}/>
-            </Grid>
-            <Grid item xs={6}>
-              {t('ITERATION_CYCLE')}
-            </Grid>
-            <Grid item xs={6}>
-              <InputNumber min={1} value={this.state.config.currency && this.state.config.currency.iterationCycleInMs}
-                           onChange={this.changeCurrencyFieldValueNumber('iterationCycleInMs').bind(this)}/>
-            </Grid>
-            <Grid item xs={6}>
-              {t('POINTS_PER_VIEW_ITERATION')}
-            </Grid>
-            <Grid item xs={6}>
-              <InputNumber min={1} value={this.state.config.currency && this.state.config.currency.pointsPerViewIteration}
-                           onChange={this.changeCurrencyFieldValueNumber('pointsPerViewIteration').bind(this)}/>
-            </Grid>
-            <Grid item xs={6}>
-              {t('FOLLOWER_MULTIPLIER')}
-            </Grid>
-            <Grid item xs={6}>
-              <InputNumber min={1} value={this.state.config.currency && this.state.config.currency.followerMultiplier}
-                           onChange={this.changeCurrencyFieldValueNumber('followerMultiplier').bind(this)}/>
-            </Grid>
-            <Grid item xs={6}>
-              {t('SUBSCRIBER_MULTIPLIER')}
-            </Grid>
-            <Grid item xs={6}>
-              <InputNumber min={1} value={this.state.config.currency && this.state.config.currency.subscriberMultiplier}
-                           onChange={this.changeCurrencyFieldValueNumber('subscriberMultiplier').bind(this)}/>
-            </Grid>
-          </Grid>
-        </TabPanel>
-        <TabPanel value={this.state.selectedTab} index={2}>
-          <div>
-            {t('EXCLUDED_USERS')}
-          </div>
-          <Select
-            mode='tags'
-            style={{width: '100%', margin: '6px 0'}}
-            placeholder={t('EXCLUDED_USERS')}
-            onChange={() => {}}
-            tokenSeparators={[',', ' ']}
-            value={this.state.config.excludedUsers}
-          />
-        </TabPanel>
-      </Paper>
+          </TabPanel>
+          <TabPanel value={this.state.selectedTab} index={2}>
+            <div>
+              {t('EXCLUDED_USERS')}
+            </div>
+            <Select
+              mode='tags'
+              style={{width: '100%', margin: '6px 0'}}
+              placeholder={t('EXCLUDED_USERS')}
+              onChange={() => {
+              }}
+              tokenSeparators={[',', ' ']}
+              value={this.state.config.excludedUsers}
+            />
+          </TabPanel>
+        </Paper>
+        <Paper className='botSettingsPageSaveButtonPaper'>
+            <Button
+              color='primary'
+              variant='contained'
+              className='botSettingsSaveButton'
+              disabled={objEqual(this.state.config, this.state.initialConfig)}
+            >
+              {t('SAVE_CHANGES')}
+            </Button>
+        </Paper>
+      </>
     )
   }
 }

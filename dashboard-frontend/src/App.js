@@ -30,7 +30,10 @@ class App extends React.Component {
       currentUserInfo(accessToken)
         .then(res => {
           if (res.data && res.data.data && res.data.data.length > 0) {
-            this.setState({loggedInUser: res.data.data[0]})
+            this.setState({
+              accessToken,
+              loggedInUser: res.data.data[0]
+            })
           } else {
             localStorage.removeItem('accessToken')
           }
@@ -40,7 +43,10 @@ class App extends React.Component {
       hasAdministrationRights(accessToken)
         .then(res => {
           if (res.data) {
-            this.setState({hasAdministrationRights: res.data.hasRights})
+            this.setState({
+              accessToken,
+              hasAdministrationRights: res.data.hasRights
+            })
           }
         })
     }
@@ -56,6 +62,7 @@ class App extends React.Component {
       <TranslatorProvider translations={translations[this.state.locale]}>
         <PermissionsContext.Provider value={this.state.hasAdministrationRights}>
           <Page
+            accessToken={this.state.accessToken}
             selectedPage={this.state.selectedPage}
             selectPage={this.selectPage.bind(this)}
             loggedInUser={this.state.loggedInUser}

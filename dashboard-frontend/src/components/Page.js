@@ -75,7 +75,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Page = ({t, selectPage, selectedPage, loggedInUser, locale, changeLocale}) => {
+const Page = ({t, accessToken, selectPage, selectedPage, loggedInUser, locale, changeLocale}) => {
 
   const classes = useStyles()
   const theme = useTheme()
@@ -187,7 +187,8 @@ const Page = ({t, selectPage, selectedPage, loggedInUser, locale, changeLocale})
                 selectedPage === 'BITS_LEADERBOARD' && <BitsLeaderboard/>
               }
               {
-                selectedPage === 'BOT_SETTINGS' && (loggedInUser && hasAdministrationRights || true) && <BotSettingsPage/>
+                selectedPage === 'BOT_SETTINGS' && (loggedInUser && hasAdministrationRights || true) &&
+                <BotSettingsPage accessToken={accessToken}/>
               }
               {
                 selectedPage === 'BOT_SETTINGS' && loggedInUser && !hasAdministrationRights && <InsufficientPermission/>

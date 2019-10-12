@@ -15,14 +15,16 @@ import {addCustomCommand} from '../../requests/requests'
 import queryString from 'query-string'
 
 
+const defaultCustomCommandState = {
+  commandHandles: [],
+  response: '',
+  showTwitchHandle: true
+}
+
 class AddCustomCommandDialog extends React.Component {
 
   state = {
-    customCommand: {
-      commandHandles: [],
-      response: '',
-      showTwitchHandle: true
-    },
+    customCommand: defaultCustomCommandState,
     snackbarOpen: false
   }
 
@@ -51,6 +53,7 @@ class AddCustomCommandDialog extends React.Component {
       addCustomCommand(modifiedCustomCommand, accessToken)
         .then(res => {
           if (res.status === 200) {
+            this.setState({customCommand: defaultCustomCommandState})
             this.handleClose()
             this.openSuccessSnackbar()
             this.props.reload()

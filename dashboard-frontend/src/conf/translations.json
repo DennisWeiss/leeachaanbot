@@ -87,7 +87,8 @@
       "FOLLOWER_MULTIPLIER": "Follower multiplier",
       "SUBSCRIBER_MULTIPLIER": "Subscriber multiplier",
       "EXCLUDED_USERS": "Excluded users",
-      "SAVE_CHANGES": "Save changes"
+      "SAVE_CHANGES": "Save changes",
+      "SAVED_CHANGES_SUCCESSFULLY": "Saved changes successfully"
     }
   },
   "de": {
@@ -178,7 +179,8 @@
       "FOLLOWER_MULTIPLIER": "Follower Multiplikator",
       "SUBSCRIBER_MULTIPLIER": "Abbonenten Multiplikator",
       "EXCLUDED_USERS": "Ausgeschlossene Nutzer",
-      "SAVE_CHANGES": "Speichere Änderungen"
+      "SAVE_CHANGES": "Speichere Änderungen",
+      "SAVED_CHANGES_SUCCESSFULLY": "Änderungen gespeichert"
     }
   }
 }

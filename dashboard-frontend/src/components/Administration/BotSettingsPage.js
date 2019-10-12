@@ -1,10 +1,11 @@
 import React from 'react'
-import {Button, Paper, Tabs, Tab, Grid} from '@material-ui/core'
+import {Button, Paper, Tabs, Tab, Grid, IconButton, Snackbar} from '@material-ui/core'
 import {Input, InputNumber, Select} from 'antd'
 import {translate} from 'react-translate'
 import TabPanel from '../util/TabPanel'
 import './BotSettingsPage.scss'
-import {fetchSecuredConfig} from '../../requests/requests'
+import {fetchSecuredConfig, updateSecuredConfig} from '../../requests/requests'
+import CloseIcon from '@material-ui/icons/Close'
 
 
 const objEqual = (a, b) => {
@@ -35,7 +36,8 @@ class BotSettingsPage extends React.Component {
   state = {
     selectedTab: 0,
     config: {},
-    initialConfig: {}
+    initialConfig: {},
+    snackbarOpen: false
   }
 
   componentDidMount() {
@@ -77,11 +79,54 @@ class BotSettingsPage extends React.Component {
     this.setState({config})
   }
 
+  changeExcludedUsers(users) {
+    const config = {...this.state.config}
+    config.excludedUsers = users
+    this.setState({config})
+  }
+
+  saveChanges() {
+    updateSecuredConfig(this.state.config, this.props.accessToken)
+      .then(res => {
+        if (res.status === 200) {
+          this.setState({
+            snackbarOpen: true,
+            config: res.data,
+            initialConfig: res.data
+          })
+        }
+      })
+  }
+
+  handleSnackbarClose() {
+    this.setState({snackbarOpen: false})
+  }
+
   render() {
     const {t} = this.props
 
     return (
       <>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          open={this.state.snackbarOpen}
+          autoHideDuration={6000}
+          onClose={this.handleSnackbarClose.bind(this)}
+          message={<span>{t('SAVED_CHANGES_SUCCESSFULLY')}</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="close"
+              color="inherit"
+              onClick={this.handleSnackbarClose.bind(this)}
+            >
+              <CloseIcon />
+            </IconButton>,
+          ]}
+        />
         <Paper className='botSettingsPagePaper'>
           <Tabs
             value={this.state.selectedTab}
@@ -206,8 +251,7 @@ class BotSettingsPage extends React.Component {
               mode='tags'
               style={{width: '100%', margin: '6px 0'}}
               placeholder={t('EXCLUDED_USERS')}
-              onChange={() => {
-              }}
+              onChange={this.changeExcludedUsers.bind(this)}
               tokenSeparators={[',', ' ']}
               value={this.state.config.excludedUsers}
             />
@@ -219,6 +263,7 @@ class BotSettingsPage extends React.Component {
               variant='contained'
               className='botSettingsSaveButton'
               disabled={objEqual(this.state.config, this.state.initialConfig)}
+              onClick={this.saveChanges.bind(this)}
             >
               {t('SAVE_CHANGES')}
             </Button>

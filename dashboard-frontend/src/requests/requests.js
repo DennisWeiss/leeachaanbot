@@ -51,6 +51,12 @@ const fetchSecuredConfig = accessToken => axios.get(`${conf.securedConfigEndpoin
   }
 })
 
+const updateSecuredConfig = (config, accessToken) => axios.post(`${conf.securedConfigEndpoint}/update`, config, {
+  headers: {
+    Authorization: accessToken
+  }
+})
+
 export {
   fetchPointsLeadeboard,
   fetchDonationLeaderboard,
@@ -63,5 +69,6 @@ export {
   updateCustomCommand,
   hasAdministrationRights,
   fetchPointsScore,
-  fetchSecuredConfig
+  fetchSecuredConfig,
+  updateSecuredConfig
 }

@@ -187,7 +187,7 @@ const Page = ({t, accessToken, selectPage, selectedPage, loggedInUser, locale, c
                 selectedPage === 'BITS_LEADERBOARD' && <BitsLeaderboard/>
               }
               {
-                selectedPage === 'BOT_SETTINGS' && (loggedInUser && hasAdministrationRights || true) &&
+                selectedPage === 'BOT_SETTINGS' && loggedInUser && hasAdministrationRights &&
                 <BotSettingsPage accessToken={accessToken}/>
               }
               {

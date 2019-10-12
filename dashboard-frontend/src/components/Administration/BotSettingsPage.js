@@ -9,7 +9,6 @@ import CloseIcon from '@material-ui/icons/Close'
 
 
 const objEqual = (a, b) => {
-  console.log(a, b)
   for (const obj of [a, b]) {
     for (const key of Object.keys(obj)) {
       if (typeof a[key] === 'object') {
@@ -53,7 +52,6 @@ class BotSettingsPage extends React.Component {
   }
 
   handleTabChange(event, selectedTab) {
-    console.log(selectedTab)
     this.setState({selectedTab})
   }
 

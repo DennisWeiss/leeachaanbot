@@ -44,7 +44,6 @@ class EditCustomCommandDialog extends React.Component {
     }
     if (accessToken) {
       localStorage.setItem('accessToken', accessToken)
-      console.log('accessToken', accessToken)
       updateCustomCommand(modifiedCustomCommand, accessToken)
         .then(res => {
           if (res.status === 200) {

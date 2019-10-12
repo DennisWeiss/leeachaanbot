@@ -57,7 +57,6 @@ class App extends React.Component {
   changeLocale = locale => this.setState({locale})
 
   render() {
-    console.log(this.state.loggedInUser)
     return (
       <TranslatorProvider translations={translations[this.state.locale]}>
         <PermissionsContext.Provider value={this.state.hasAdministrationRights}>

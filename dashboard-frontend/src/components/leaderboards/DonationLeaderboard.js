@@ -21,7 +21,6 @@ class DonationLeaderboard extends React.Component {
       })
     fetchConfig()
       .then(res => {
-        console.log(res.data)
         this.setState({donationCurrency: res.data.donationCurrency})
       })
   }

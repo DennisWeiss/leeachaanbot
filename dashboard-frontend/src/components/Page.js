@@ -136,7 +136,7 @@ const Page = ({t, accessToken, selectPage, selectedPage, loggedInUser, locale, c
     </div>
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename='/leeachaanbot'>
       <AppBar position='fixed' className={classes.appBar}>
         <Toolbar>
           <IconButton className={classes.menuButton} color='inherit'>

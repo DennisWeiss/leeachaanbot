@@ -92,6 +92,15 @@ public class LeaderboardService {
 
     }
 
+    public boolean deleteUser(String username) {
+        Optional<Users> user = userRepository.findByName(username);
+        if (user.isPresent()) {
+            userRepository.deleteByName(username);
+            return true;
+        }
+        return false;
+    }
+
     private List<PointsLeaderboardEntry> mapBitsLeaderboardData(List<BitsLeaderboardEntry> leaderboard) {
         return leaderboard
                 .stream()

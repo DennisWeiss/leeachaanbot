@@ -4,7 +4,7 @@ import {Input, InputNumber, Select} from 'antd'
 import {translate} from 'react-translate'
 import TabPanel from '../util/TabPanel'
 import './BotSettingsPage.scss'
-import {fetchSecuredConfig, updateSecuredConfig} from '../../requests/requests'
+import {deleteUser, fetchSecuredConfig, updateSecuredConfig} from '../../requests/requests'
 import CloseIcon from '@material-ui/icons/Close'
 
 
@@ -79,11 +79,17 @@ class BotSettingsPage extends React.Component {
 
   changeExcludedUsers(users) {
     const config = {...this.state.config}
-    config.excludedUsers = users
+    config.excludedUsers = users.map(user => user.toLowerCase())
     this.setState({config})
   }
 
   saveChanges() {
+    const alreadyExcludedUsers = new Set(this.state.initialConfig.excludedUsers)
+    this.state.config.excludedUsers.forEach(user => {
+      if (!alreadyExcludedUsers.has(user)) {
+        deleteUser(user, this.props.accessToken).then(res => {})
+      }
+    })
     updateSecuredConfig(this.state.config, this.props.accessToken)
       .then(res => {
         if (res.status === 200) {

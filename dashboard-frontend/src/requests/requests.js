@@ -57,6 +57,12 @@ const updateSecuredConfig = (config, accessToken) => axios.post(`${conf.securedC
   }
 })
 
+const deleteUser = (username, accessToken) => axios.delete(`${conf.leaderboardEndpoint}/deleteuser/${username}`, {
+  headers: {
+    Authorization: accessToken
+  }
+})
+
 export {
   fetchPointsLeadeboard,
   fetchDonationLeaderboard,
@@ -70,5 +76,6 @@ export {
   hasAdministrationRights,
   fetchPointsScore,
   fetchSecuredConfig,
-  updateSecuredConfig
+  updateSecuredConfig,
+  deleteUser
 }

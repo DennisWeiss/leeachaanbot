@@ -83,6 +83,9 @@ class AddCustomCommandDialog extends React.Component {
     this.setState({snackbarOpen: true})
   }
 
+  isValidCommand = () => this.state.customCommand.commandHandles && this.state.customCommand.commandHandles.length > 0
+    && this.state.customCommand.response && this.state.customCommand.response.length > 0
+
   render() {
     const {t, open} = this.props
 
@@ -141,7 +144,9 @@ class AddCustomCommandDialog extends React.Component {
             </Checkbox>
             <DialogActions>
               <Button onClick={this.handleClose.bind(this)}>{t('CANCEL')}</Button>
-              <Button onClick={this.handleSubmit.bind(this)} color='primary'>{t('ADD_CUSTOM_COMMAND')}</Button>
+              <Button onClick={this.handleSubmit.bind(this)} disabled={!this.isValidCommand()} color='primary'>
+                {t('ADD_CUSTOM_COMMAND')}
+              </Button>
             </DialogActions>
           </DialogContent>
         </Dialog>

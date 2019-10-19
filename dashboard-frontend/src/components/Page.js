@@ -32,6 +32,7 @@ import CustomCommandsPage from './Administration/CustomCommandsPage'
 import PermissionsContext from '../context/PermissionsContext'
 import './Page.scss'
 import LanguageSelector from './util/LanguageSelector'
+import {BrowserRouter, Route, Link, Switch} from 'react-router-dom'
 
 
 const drawerWidth = 240
@@ -90,42 +91,52 @@ const Page = ({t, accessToken, selectPage, selectedPage, loggedInUser, locale, c
     <div>
       <div className={classes.toolbar}/>
       <List subheader={t('LEADERBOARDS')}>
-        <ListItem button key='POINTS_LEADERBOARD' onClick={() => selectPage('POINTS_LEADERBOARD')}>
-          <ListItemIcon className={classes.multiListItemIcon}><StarIcon/></ListItemIcon>
-          <ListItemText primary={t('POINTS_LEADERBOARD')}/>
-        </ListItem>
-        <ListItem button key='DONATION_LEADERBOARD' onClick={() => selectPage('DONATION_LEADERBOARD')}>
-          <ListItemIcon className={classes.multiListItemIcon}><AttachMoneyIcon/></ListItemIcon>
-          <ListItemText primary={t('DONATION_LEADERBOARD')}/>
-        </ListItem>
-        <ListItem button key='BITS_LEADERBOARD' onClick={() => selectPage('BITS_LEADERBOARD')}>
-          <ListItemIcon className={classes.multiListItemIcon}>
-            <svg className="tw-icon__svg" width="24px" height="24px" version="1.1" viewBox="0 0 20 20" x="0px"
-                 y="0px">
-              <path fill-rule="evenodd" clip-rule="evenodd"
-                    d="M3 12l7-10 7 10-7 6-7-6zm2.678-.338L10 5.487l4.322 6.173-.85.728L10 11l-3.473 1.39-.849-.729z"></path>
-            </svg>
-          </ListItemIcon>
-          <ListItemText primary={t('BITS_LEADERBOARD')}/>
-        </ListItem>
+        <Link to='/points-leaderboard'>
+          <ListItem button key='POINTS_LEADERBOARD' onClick={() => selectPage('POINTS_LEADERBOARD')}>
+            <ListItemIcon className={classes.multiListItemIcon}><StarIcon/></ListItemIcon>
+            <ListItemText primary={t('POINTS_LEADERBOARD')}/>
+          </ListItem>
+        </Link>
+        <Link to='/donation-leaderboard'>
+          <ListItem button key='DONATION_LEADERBOARD' onClick={() => selectPage('DONATION_LEADERBOARD')}>
+            <ListItemIcon className={classes.multiListItemIcon}><AttachMoneyIcon/></ListItemIcon>
+            <ListItemText primary={t('DONATION_LEADERBOARD')}/>
+          </ListItem>
+        </Link>
+        <Link to='/bits-leaderboard'>
+          <ListItem button key='BITS_LEADERBOARD' onClick={() => selectPage('BITS_LEADERBOARD')}>
+            <ListItemIcon className={classes.multiListItemIcon}>
+              <svg className="tw-icon__svg" width="24px" height="24px" version="1.1" viewBox="0 0 20 20" x="0px"
+                   y="0px">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M3 12l7-10 7 10-7 6-7-6zm2.678-.338L10 5.487l4.322 6.173-.85.728L10 11l-3.473 1.39-.849-.729z"></path>
+              </svg>
+            </ListItemIcon>
+            <ListItemText primary={t('BITS_LEADERBOARD')}/>
+          </ListItem>
+        </Link>
       </List>
       <Divider/>
       <List subheader={t('ADMINISTRATION')}>
-        <ListItem button key='BOT_SETTINGS' onClick={() => selectPage('BOT_SETTINGS')}>
-          <ListItemIcon className={classes.multiListItemIcon}>
-            <span style={{marginRight: 5}}><FontAwesomeIcon icon={faRobot}/></span>
-          </ListItemIcon>
-          <ListItemText primary={t('BOT_SETTINGS')}/>
-        </ListItem>
-        <ListItem button key='CUSTOM_COMMANDS' onClick={() => selectPage('CUSTOM_COMMANDS')}>
-          <ListItemIcon className={classes.multiListItemIcon}><SettingsIcon/></ListItemIcon>
-          <ListItemText primary={t('CUSTOM_COMMANDS')}/>
-        </ListItem>
+        <Link to='/bot-settings'>
+          <ListItem button key='BOT_SETTINGS' onClick={() => selectPage('BOT_SETTINGS')}>
+            <ListItemIcon className={classes.multiListItemIcon}>
+              <span style={{marginRight: 5}}><FontAwesomeIcon icon={faRobot}/></span>
+            </ListItemIcon>
+            <ListItemText primary={t('BOT_SETTINGS')}/>
+          </ListItem>
+        </Link>
+        <Link to='/custom-commands'>
+          <ListItem button key='CUSTOM_COMMANDS' onClick={() => selectPage('CUSTOM_COMMANDS')}>
+            <ListItemIcon className={classes.multiListItemIcon}><SettingsIcon/></ListItemIcon>
+            <ListItemText primary={t('CUSTOM_COMMANDS')}/>
+          </ListItem>
+        </Link>
       </List>
     </div>
 
   return (
-    <>
+    <BrowserRouter>
       <AppBar position='fixed' className={classes.appBar}>
         <Toolbar>
           <IconButton className={classes.menuButton} color='inherit'>
@@ -176,42 +187,47 @@ const Page = ({t, accessToken, selectPage, selectedPage, loggedInUser, locale, c
         <main className={classes.content}>
           <div className={classes.toolbar}/>
           <PermissionsContext.Consumer>
-            {hasAdministrationRights => <>
-              {
-                selectedPage === 'POINTS_LEADERBOARD' && <PointsLeaderboard/>
-              }
-              {
-                selectedPage === 'DONATION_LEADERBOARD' && <DonationLeaderboard/>
-              }
-              {
-                selectedPage === 'BITS_LEADERBOARD' && <BitsLeaderboard/>
-              }
-              {
-                selectedPage === 'BOT_SETTINGS' && loggedInUser && hasAdministrationRights &&
-                <BotSettingsPage accessToken={accessToken}/>
-              }
-              {
-                selectedPage === 'BOT_SETTINGS' && loggedInUser && !hasAdministrationRights && <InsufficientPermission/>
-              }
-              {
-                selectedPage === 'BOT_SETTINGS' && !loggedInUser && <LoggedInAsAdministrator/>
-              }
-              {
-                selectedPage === 'CUSTOM_COMMANDS' && loggedInUser && hasAdministrationRights && <CustomCommandsPage/>
-              }
-              {
-                selectedPage === 'CUSTOM_COMMANDS' && loggedInUser && !hasAdministrationRights &&
-                <InsufficientPermission/>
-              }
-              {
-                selectedPage === 'CUSTOM_COMMANDS' && !loggedInUser && <LoggedInAsAdministrator/>
-              }
-            </>
+            {hasAdministrationRights => <Switch>
+              <Route path='/' exact>
+                <PointsLeaderboard/>
+              </Route>
+              <Route path='/points-leaderboard'>
+                <PointsLeaderboard/>
+              </Route>
+              <Route path='/donation-leaderboard'>
+                <DonationLeaderboard/>
+              </Route>
+              <Route path='/bits-leaderboard'>
+                <BitsLeaderboard/>
+              </Route>
+              <Route path='/bot-settings'>
+                {
+                  loggedInUser && hasAdministrationRights && <BotSettingsPage accessToken={accessToken}/>
+                }
+                {
+                  loggedInUser && !hasAdministrationRights && <InsufficientPermission/>
+                }
+                {
+                  !loggedInUser && <LoggedInAsAdministrator/>
+                }
+              </Route>
+              <Route path='/custom-commands'>
+                {
+                  loggedInUser && hasAdministrationRights && <CustomCommandsPage/>
+                }
+                {
+                  loggedInUser && !hasAdministrationRights && <InsufficientPermission/>
+                }
+                {
+                  !loggedInUser && <LoggedInAsAdministrator/>
+                }
+              </Route>
+            </Switch>
             }
           </PermissionsContext.Consumer>
         </main>
       </div>
-    </>
+    </BrowserRouter>
   )
 }
 

@@ -42,6 +42,7 @@ const fetchFollowers = paginationCursor => new Promise((resolve, reject) => {
         resolve([])
       }
     })
+    .catch(err => console.log(err))
 })
 
 

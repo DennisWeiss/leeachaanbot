@@ -37,7 +37,7 @@ const fetchFollowers = paginationCursor => new Promise((resolve, reject) => {
     .then(res => {
       if (res.data.pagination && res.data.data && res.data.data.length > 0) {
         fetchFollowers(res.data.pagination.cursor)
-          .then(followers => resolve([...followers, res.data.data.map(follower => follower.from_id)]))
+          .then(followers => resolve([...followers, ...res.data.data.map(follower => follower.from_id)]))
       } else {
         resolve([])
       }

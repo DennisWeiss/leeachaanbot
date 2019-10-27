@@ -29,7 +29,7 @@ const updateViewerPoints = function (userId, username, multiplier = 1) {
 
 const fetchFollowers = paginationCursor => new Promise((resolve, reject) => {
   axios.get(`https://api.twitch.tv/helix/users/follows?to_id=${global.broadcasterId}&first=100`
-  + paginationCursor != null ? `&after=${paginationCursor}` : '', {
+  + (paginationCursor != null ? `&after=${paginationCursor}` : ''), {
     headers: {
       'Client-ID': conf.clientId
     }

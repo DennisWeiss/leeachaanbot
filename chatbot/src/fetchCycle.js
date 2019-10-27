@@ -57,7 +57,12 @@ const update = function () {
                 new Set(res.data.data.map(follow => follow.from_id)) : new Set()
               axios.get(`http://tmi.twitch.tv/group/user/${conf.broadcasterChannelName}/chatters`)
                 .then(res => res.data && res.data.chatters &&
-                  [...res.data.chatters.viewers, ...res.data.chatters.moderators].forEach(username => {
+                  [...res.data.chatters.viewers, 
+				  ...res.data.chatters.moderators, 
+				  ...res.data.chatters.vips, 
+				  ...res.data.chatters.staff,
+				  ...res.data.chatters.admins,
+				  ...res.data.chatters.global_mods].forEach(username => {
                     axios.get(`https://api.twitch.tv/helix/users?login=${username}`, {
                       headers: {
                         'Client-ID': conf.clientId

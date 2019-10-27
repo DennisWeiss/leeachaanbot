@@ -70,8 +70,6 @@ const update = function () {
               fetchFollowers()
                 .then(followersList => {
                   const followers = new Set(followersList)
-                  console.log(followers)
-                  console.log(followers.size)
                   axios.get(`http://tmi.twitch.tv/group/user/${conf.broadcasterChannelName}/chatters`)
                     .then(res => res.data && res.data.chatters &&
                       [...res.data.chatters.viewers,

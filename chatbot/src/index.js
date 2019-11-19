@@ -79,4 +79,8 @@ function onConnectedHandler(addr, port) {
   console.log(`* Connected to ${addr}:${port}`)
 }
 
+fetchCycle.update()
+
+console.log('updating every ' + conf.currency.iterationCycleInMs)
+
 setInterval(fetchCycle.update, conf.currency.iterationCycleInMs)

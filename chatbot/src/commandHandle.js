@@ -5,6 +5,7 @@ const Command = require('./model/CustomCommand')
 const conf = require('./conf/conf')
 const roulette = require('./model/roulette')
 const translations = require('./conf/translations')
+const numeral = require('numeral')
 const axios = require('axios')
 
 
@@ -239,7 +240,7 @@ const give = (client, target, userId, username, usernameToGive, pointsToGive) =>
   }
 }
 
-const formatPoints = points => `${points} ${points === 1 ? conf.currency.nameSingular : conf.currency.namePlural}`
+const formatPoints = points => `${numeral(points).format('0,0')} ${points === 1 ? conf.currency.nameSingular : conf.currency.namePlural}`
 
 function handleCommand(client, target, context, cmd) {
   if (cmd.startsWith('!gamble')) {

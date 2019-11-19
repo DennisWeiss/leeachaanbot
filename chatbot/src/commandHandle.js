@@ -53,7 +53,6 @@ const leaderboardMessage = (sortedUsers, userId, top = 3, index = 0, userAppeare
         'Client-ID': conf.clientId
       }
     }).then(res => {
-      console.log(res.data)
       const messagePart = leaderboardMessagePart(
         index,
         res.data && res.data.data && res.data.data.length > 0 ? res.data.data[0].display_name : '*',

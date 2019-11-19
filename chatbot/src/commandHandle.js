@@ -23,42 +23,76 @@ function dangos(client, target, userId, username) {
     })
 }
 
-const leaderboardMessagePart = (msg, index, user) => `${index + 1}. ${user.displayName} ${formatPoints(user.points)} - `
+const leaderboardMessagePart = (index, displayName, points) => `${index + 1}. ${displayName} ${formatPoints(points)} - `
+
+const leaderboardMessage = (sortedUsers, userId, top = 3, index = 0, userAppeared = false) => new Promise(resolve => {
+  if (index >= sortedUsers.length) {
+    resolve('')
+  } else if (top === 0) {
+    if (userAppeared) {
+      resolve('')
+    } else if (sortedUsers[index].userId === userId) {
+      axios.get(`https://api.twitch.tv/helix/users?id=${sortedUsers[index].userId}`, {
+        headers: {
+          'Client-ID': conf.clientId
+        }
+      }).then(res => {
+        const messagePart = leaderboardMessagePart(
+          index,
+          res.data && res.data.data && res.data.data.length > 0 ? res.data.data[0].display_name : '*',
+          sortedUsers[index].points
+        )
+        resolve(messagePart.substr(0, messagePart.length - 3))}
+      )
+    } else {
+      leaderboardMessage(sortedUsers, userId, top, index + 1, userAppeared).then(resolve)
+    }
+  } else {
+    axios.get(`https://api.twitch.tv/helix/users?id=${sortedUsers[index].userId}`, {
+      headers: {
+        'Client-ID': conf.clientId
+      }
+    }).then(res => {
+      console.log(res.data)
+      const messagePart = leaderboardMessagePart(
+        index,
+        res.data && res.data.data && res.data.data.length > 0 ? res.data.data[0].display_name : '*',
+        sortedUsers[index].points
+      )
+      leaderboardMessage(sortedUsers, userId, top - 1, index + 1,
+        userAppeared || sortedUsers[index].userId === userId)
+        .then(msg => resolve(
+          messagePart.substr(0, messagePart.length - (userAppeared && top === 1 ? 3 : 0)) + msg
+        ))
+    })
+  }
+})
 
 function leaderboard(client, target, userId, username) {
   User.find({})
     .exec((err, users) => {
       const sortedUsers = [...users].sort((a, b) => b.points - a.points)
       let msg = `@${username} `
-      for (let i = 0; i < Math.min(3, sortedUsers.length); i++) {
-        msg += leaderboardMessagePart(msg, i, sortedUsers[i])
-      }
-      for (let i = 0; i < sortedUsers.length; i++) {
-        if (sortedUsers[i].userId === userId) {
-          if (i > 2) {
-            msg += leaderboardMessagePart(msg, i, sortedUsers[i])
-          }
-          break
-        }
-      }
-      client.say(target, msg.substr(0, msg.length - 3))
+      leaderboardMessage(sortedUsers, userId)
+        .then(msg => client.say(target, `@${username} ${msg}`))
     })
 }
 
 const gamble = (client, target, userId, username, betFraction) => {
-    User.findOne({userId})
-      .exec((err, user) => {
-        if (user) {
-          if (Math.random() >=  0.5) {
-            user.points = Math.floor((1 + betFraction) * user.points)
-            client.say(target, `@${username} Herzlichen Glückwunsch! Du hast jetzt ${formatPoints(user.points)}. Versuch es doch gleich nochmal! leeachLove`)
-          } else {
-            user.points = Math.floor((1 - betFraction) * user.points)
-            client.say(target, `@${username} Oh Nein, du hast leider verloren! Du hast jetzt ${formatPoints(user.points)}. Versuch es doch gleich nochmal! 🤭`)
-          }
-          user.save().then(() => {})
+  User.findOne({userId})
+    .exec((err, user) => {
+      if (user) {
+        if (Math.random() >= 0.5) {
+          user.points = Math.floor((1 + betFraction) * user.points)
+          client.say(target, `@${username} Herzlichen Glückwunsch! Du hast jetzt ${formatPoints(user.points)}. Versuch es doch gleich nochmal! leeachLove`)
+        } else {
+          user.points = Math.floor((1 - betFraction) * user.points)
+          client.say(target, `@${username} Oh Nein, du hast leider verloren! Du hast jetzt ${formatPoints(user.points)}. Versuch es doch gleich nochmal! 🤭`)
         }
-      })
+        user.save().then(() => {
+        })
+      }
+    })
 }
 
 const rouletteColor = number => {
@@ -80,7 +114,7 @@ const rouletteColorBet = (client, target, userId, username, points, bet) => {
           client.say(target, `@${username} Du besitzt leider nicht genug ${conf.currency.namePlural}.`)
         } else {
           const rouletteResult = Math.floor(37 * Math.random())
-          const color = rouletteColor(rouletteResult);
+          const color = rouletteColor(rouletteResult)
           const won = bet === color
           let msg = `@${username} Es ist eine ${rouletteResult} (${translations[color]}). `
           if (won) {
@@ -90,7 +124,8 @@ const rouletteColorBet = (client, target, userId, username, points, bet) => {
             user.points -= points
             msg += `Du hast leider verloren! Du besitzt jetzt ${formatPoints(user.points)}.`
           }
-          user.save().then(() => {})
+          user.save().then(() => {
+          })
           client.say(target, msg)
         }
       }
@@ -105,7 +140,7 @@ const rouletteNumber = (client, target, userId, username, points, bet) => {
           client.say(target, `@${username} Du besitzt leider nicht genug ${conf.currency.namePlural}.`)
         } else {
           const rouletteResult = Math.floor(37 * Math.random())
-          const color = rouletteColor(rouletteResult);
+          const color = rouletteColor(rouletteResult)
           const won = bet === rouletteResult
           let msg = `@${username} Es ist eine ${rouletteResult} (${translations[color]}). `
           if (won) {
@@ -115,7 +150,8 @@ const rouletteNumber = (client, target, userId, username, points, bet) => {
             user.points -= points
             msg += `Du hast leider verloren! Du besitzt jetzt ${formatPoints(user.points)}.`
           }
-          user.save().then(() => {})
+          user.save().then(() => {
+          })
           client.say(target, msg)
         }
       }
@@ -220,7 +256,7 @@ function handleCommand(client, target, context, cmd) {
     const parts = cmd.split(/\s+/)
     if (parts.length === 3) {
       const points = parseInt(parts[1])
-      const bet = parts[2];
+      const bet = parts[2]
       if (points) {
         if (['green', 'black', 'red'].includes(bet)) {
           rouletteColorBet(client, target, context['user-id'], context.username, points, bet)

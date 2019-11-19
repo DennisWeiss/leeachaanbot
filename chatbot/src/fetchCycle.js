@@ -47,7 +47,6 @@ const fetchFollowers = paginationCursor => new Promise((resolve, reject) => {
 
 
 const update = function () {
-  console.log('update')
   axios.get(`https://api.twitch.tv/helix/streams?user_login=${conf.broadcasterChannelName}`, {
     headers: {
       'Client-ID': conf.clientId

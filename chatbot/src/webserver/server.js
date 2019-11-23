@@ -1,5 +1,5 @@
-import express from 'express'
-import conf from '../conf/conf'
+const express = require('express')
+const conf = require('../conf/conf')
 
 const app = express()
 

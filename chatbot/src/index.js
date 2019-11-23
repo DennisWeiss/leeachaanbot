@@ -10,6 +10,8 @@ const global = require('./global')
 const commandHandle = require('./commandHandle')
 const fetchCycle = require('./fetchCycle')
 
+require('./webserver/server')
+
 
 // Define configuration options
 const opts = {

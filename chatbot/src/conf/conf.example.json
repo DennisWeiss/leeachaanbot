@@ -19,5 +19,6 @@
   "excludedUsers": [
     "moobot",
     "nightbot"
-  ]
+  ],
+  "port": 11003
 }

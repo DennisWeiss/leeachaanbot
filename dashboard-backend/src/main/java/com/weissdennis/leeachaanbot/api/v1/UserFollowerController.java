@@ -2,10 +2,7 @@ package com.weissdennis.leeachaanbot.api.v1;
 
 import com.weissdennis.leeachaanbot.integration.twitch.TwitchData;
 import com.weissdennis.leeachaanbot.integration.twitch.TwitchFollow;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
@@ -13,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserFollowerController {
 
     @PostMapping
-    public void postNewFollower(TwitchData<TwitchFollow> followData) {
+    public void postNewFollower(@RequestBody TwitchData<TwitchFollow> followData) {
         System.out.println(followData);
     }
 

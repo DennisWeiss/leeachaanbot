@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const Security = require('./model/Security')
 const User = require('./model/User')
 
-const conf = require('./conf/conf.json')
+const conf = require('./conf/conf')
 
 const global = require('./global')
 const commandHandle = require('./commandHandle')

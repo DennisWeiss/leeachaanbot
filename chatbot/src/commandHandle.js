@@ -89,8 +89,10 @@ const gamble = (client, target, userId, username, betFraction) => {
           user.points = Math.floor((1 - betFraction) * user.points)
           client.say(target, `@${username} Oh Nein, du hast leider verloren! Du hast jetzt ${formatPoints(user.points)}. Versuch es doch gleich nochmal! 🤭`)
         }
-        user.save().then(() => {
-        })
+        user.save()
+          .then(() => {
+          })
+          .catch(console.log)
       }
     })
 }

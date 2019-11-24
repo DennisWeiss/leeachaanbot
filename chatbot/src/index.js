@@ -92,7 +92,7 @@ setInterval(fetchCycle.update, conf.currency.iterationCycleInMs)
 const refreshAppAccessTokenAndSubscriptions = () => {
   global.refreshAppAccessToken().then(appAccessToken => {
     global.appAccessToken = appAccessToken
-    global.refreshSubscriptions()
+    global.refreshSubscriptions(global.broadcasterId, appAccessToken)
     setTimeout(refreshAppAccessTokenAndSubscriptions, 24 * 60 * 60 * 1000)
   })
     .catch(err => setTimeout(refreshAppAccessTokenAndSubscriptions, 24 * 60 * 60 * 1000))

@@ -32,11 +32,11 @@ const refreshToken = () => new Promise((resolve, reject) => {
 })
 
 const refreshAppAccessToken = () => new Promise((resolve, reject) => {
-  console.log('refreshing app access token')
+  console.log('Refreshing app access token')
   axios.post(`https://id.twitch.tv/oauth2/token?client_id=${conf.clientId}&client_secret=${conf.clientSecret}&grant_type=client_credentials&scope=bits:read+channel:read:subscriptions+channel_subscriptions`)
     .then(res => {
       if (res.data) {
-        resolve(res.data.accessToken)
+        resolve(res.data.access_token)
       } else {
         reject()
       }
@@ -44,20 +44,19 @@ const refreshAppAccessToken = () => new Promise((resolve, reject) => {
     .catch(reject)
 })
 
-const refreshSubscriptions = () => {
-  console.log('refreshing subscriptions with token ' + appAccessToken)
-  axios.post('https://api.twitch.tv/helix/webhooks/hub', {
-    'hub.callback': `${conf.hostname}:${conf.port}/follower`,
-    'hub.mode': 'subscribe',
-    'hub.topic': `https://api.twitch.tv/helix/users/follows?to_id=${broadcasterId}`,
-    'hub.lease_seconds': 864000
-  }, {
+const refreshSubscriptions = (broadcasterId, appAccessToken) => {
+  console.log('Refreshing subscriptions with token ' + appAccessToken)
+  axios.post(`https://api.twitch.tv/helix/webhooks/hub?hub.callback=${conf.hostname}:${conf.port}/follower&hub.mode=subscribe&hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${broadcasterId}&hub.lease_seconds=864000`, null, {
     headers: {
       Authorization: `Bearer ${appAccessToken}`
     }
   })
     .then(res => {
+      if (res.status === 202) {
+        console.log('Successfully refreshed subscription')
+      }
     })
+    .catch(console.error)
 }
 
 module.exports = {accessToken, appAccessToken, broadcasterId, refreshToken, refreshAppAccessToken, refreshSubscriptions}

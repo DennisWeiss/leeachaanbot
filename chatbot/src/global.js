@@ -31,7 +31,7 @@ const refreshToken = () => new Promise((resolve, reject) => {
     })
 })
 
-const refreshAppAccessToken = () => new Promise(resolve, reject => {
+const refreshAppAccessToken = () => new Promise((resolve, reject) => {
   console.log('refreshing app access token')
   axios.post(`https://id.twitch.tv/oauth2/token?client_id=${conf.clientId}&client_secret=${conf.clientSecret}&grant_type=client_credentials&scope=bits:read+channel:read:subscriptions+channel_subscriptions`)
     .then(res => {

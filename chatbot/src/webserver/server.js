@@ -3,6 +3,8 @@ const conf = require('../conf/conf')
 
 const app = express()
 
+app.use(express.json())
+
 app.get('/follower', (req, res) => {
   res.send(req.query['hub.challenge'])
 })

@@ -21,7 +21,7 @@ const startWebServer = client => {
           if (res.data && res.data.data && res.data.data.length > 0) {
             const msg = `Vielen Dank @${res.data.data[0].display_name} für den Follow! Willkommen in LeeaChaan's Stream leeachLove`
             console.log(msg)
-            client.say('channel1', msg)
+            client.say(conf.broadcasterChannelName, msg)
           }
         })
       }

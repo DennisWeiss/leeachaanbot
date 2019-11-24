@@ -14,7 +14,7 @@ const startWebServer = client => {
   })
 
   app.post('/follower', (req, res) => {
-    if (!follow_message_ids.includes(req.body.id)) {
+    if (!follow_message_ids.has(req.body.id)) {
       follow_message_ids.add(req.body.id)
       if (req.body.data && req.body.data.from_id) {
         fetchUserById(req.body.data.from_id).then(res => {

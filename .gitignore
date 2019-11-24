@@ -1,5 +1,5 @@
 node_modules
 .idea
-/src/conf/conf.json
+/chatbot/src/conf/conf.json
 
 application.yml

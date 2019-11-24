@@ -9,6 +9,7 @@ const conf = require('./conf/conf')
 const global = require('./global')
 const commandHandle = require('./commandHandle')
 const fetchCycle = require('./fetchCycle')
+const {startWebServer} = require('./webserver/server')
 
 
 // Define configuration options
@@ -39,6 +40,9 @@ client.on('connected', onConnectedHandler)
 
 // Connect to Twitch:
 client.connect()
+
+// Starting web server for retrieving Twitch subscriptions
+startWebServer(client)
 
 // Get access token for Twitch API
 Security.findOne({})
@@ -81,6 +85,17 @@ function onConnectedHandler(addr, port) {
 
 fetchCycle.update()
 
-console.log('updating every ' + conf.currency.iterationCycleInMs)
+console.log('Updating user points every ' + conf.currency.iterationCycleInMs + ' ms')
 
 setInterval(fetchCycle.update, conf.currency.iterationCycleInMs)
+
+const refreshAppAccessTokenAndSubscriptions = () => {
+  global.refreshAppAccessToken().then(appAccessToken => {
+    global.appAccessToken = appAccessToken
+    global.refreshSubscriptions(global.broadcasterId, appAccessToken)
+    setTimeout(refreshAppAccessTokenAndSubscriptions, 24 * 60 * 60 * 1000)
+  })
+    .catch(err => setTimeout(refreshAppAccessTokenAndSubscriptions, 24 * 60 * 60 * 1000))
+}
+
+refreshAppAccessTokenAndSubscriptions()

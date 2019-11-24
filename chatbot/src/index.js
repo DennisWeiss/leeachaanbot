@@ -85,6 +85,17 @@ function onConnectedHandler(addr, port) {
 
 fetchCycle.update()
 
-console.log('updating every ' + conf.currency.iterationCycleInMs)
+console.log('Updating user points every ' + conf.currency.iterationCycleInMs + ' ms')
 
 setInterval(fetchCycle.update, conf.currency.iterationCycleInMs)
+
+const refreshAppAccessTokenAndSubscriptions = () => {
+  global.refreshAppAccessToken().then(appAccessToken => {
+    global.appAccessToken = appAccessToken
+    global.refreshSubscriptions()
+    setTimeout(refreshAppAccessTokenAndSubscriptions, 24 * 60 * 60 * 1000)
+  })
+    .catch(err => setTimeout(refreshAppAccessTokenAndSubscriptions, 24 * 60 * 60 * 1000))
+}
+
+refreshAppAccessTokenAndSubscriptions()

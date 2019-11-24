@@ -45,7 +45,7 @@ const refreshAppAccessToken = () => new Promise((resolve, reject) => {
 })
 
 const refreshSubscriptions = () => {
-  console.log('refreshing subscriptions')
+  console.log('refreshing subscriptions with token ' + appAccessToken)
   axios.post('https://api.twitch.tv/helix/webhooks/hub', {
     'hub.callback': `${conf.hostname}:${conf.port}/follower`,
     'hub.mode': 'subscribe',

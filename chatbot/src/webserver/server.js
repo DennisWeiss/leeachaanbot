@@ -8,7 +8,7 @@ app.get('/follower', (req, res) => {
 })
 
 app.post('/follower', (req, res) => {
-  console.log(req)
+  console.log(req.body)
   res.send()
 })
 

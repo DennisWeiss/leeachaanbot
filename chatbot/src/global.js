@@ -49,6 +49,7 @@ const refreshSubscriptions = () => {
   axios.post(`https://api.twitch.tv/helix/webhooks/hub?hub.callback=${conf.hostname}:${conf.port}/follower&hub.mode=subscribe&hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${broadcasterId}&hub.lease_seconds=864000`)
     .then(res => {
     })
+    .catch(console.error)
 }
 
 module.exports = {accessToken, appAccessToken, broadcasterId, refreshToken, refreshAppAccessToken, refreshSubscriptions}

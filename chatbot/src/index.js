@@ -9,8 +9,7 @@ const conf = require('./conf/conf')
 const global = require('./global')
 const commandHandle = require('./commandHandle')
 const fetchCycle = require('./fetchCycle')
-
-require('./webserver/server')
+const {startWebServer} = require('./webserver/server')
 
 
 // Define configuration options
@@ -41,6 +40,9 @@ client.on('connected', onConnectedHandler)
 
 // Connect to Twitch:
 client.connect()
+
+// Starting web server for retrieving Twitch subscriptions
+startWebServer(client)
 
 // Get access token for Twitch API
 Security.findOne({})

@@ -7,6 +7,7 @@ const roulette = require('./model/roulette')
 const translations = require('./conf/translations')
 const numeral = require('numeral')
 const axios = require('axios')
+const {fetchUserById} = require('./requests/requests')
 
 
 function help(client, target, username) {
@@ -33,11 +34,7 @@ const leaderboardMessage = (sortedUsers, userId, top = 3, index = 0, userAppeare
     if (userAppeared) {
       resolve('')
     } else if (sortedUsers[index].userId === userId) {
-      axios.get(`https://api.twitch.tv/helix/users?id=${sortedUsers[index].userId}`, {
-        headers: {
-          'Client-ID': conf.clientId
-        }
-      }).then(res => {
+      fetchUserById(sortedUsers[index].userId).then(res => {
         const messagePart = leaderboardMessagePart(
           index,
           res.data && res.data.data && res.data.data.length > 0 ? res.data.data[0].display_name : '*',
@@ -49,11 +46,7 @@ const leaderboardMessage = (sortedUsers, userId, top = 3, index = 0, userAppeare
       leaderboardMessage(sortedUsers, userId, top, index + 1, userAppeared).then(resolve)
     }
   } else {
-    axios.get(`https://api.twitch.tv/helix/users?id=${sortedUsers[index].userId}`, {
-      headers: {
-        'Client-ID': conf.clientId
-      }
-    }).then(res => {
+    fetchUserById(sortedUsers[index].userId).then(res => {
       const messagePart = leaderboardMessagePart(
         index,
         res.data && res.data.data && res.data.data.length > 0 ? res.data.data[0].display_name : '*',

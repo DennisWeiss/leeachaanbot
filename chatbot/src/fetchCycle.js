@@ -1,12 +1,15 @@
 const global = require('./global')
 const axios = require('axios')
-
-const conf = require('./conf/conf')
 const User = require('./model/User')
 const Security = require('./model/Security')
+const Config = require('./model/Config')
 
 
-const userExcluded = username => [conf.broadcasterChannelName, conf.botUsername, ...conf.excludedUsers].includes(username)
+let config = null
+
+Config.findOne({}).exec((err, _config) => config = _config)
+
+const userExcluded = username => [config.broadcasterChannelName, config.botUsername, ...config.excludedUsers].includes(username)
 
 const updateViewerPoints = function (userId, username, multiplier = 1) {
   if (!userExcluded(username)) {
@@ -14,12 +17,12 @@ const updateViewerPoints = function (userId, username, multiplier = 1) {
       .exec(function (err, user) {
         if (user) {
           User.findOneAndUpdate({userId}, {
-            name: user.name, points: user.points + multiplier * conf.currency.pointsPerViewIteration
+            name: user.name, points: user.points + multiplier * config.currency.pointsPerViewIteration
           })
             .exec(function (err, user) {
             })
         } else {
-          const user = new User({userId, name: username, points: multiplier * conf.currency.pointsPerViewIteration})
+          const user = new User({userId, name: username, points: multiplier * config.currency.pointsPerViewIteration})
           user.save().then(() => {
           })
         }
@@ -31,7 +34,7 @@ const fetchFollowers = paginationCursor => new Promise((resolve, reject) => {
   axios.get(`https://api.twitch.tv/helix/users/follows?to_id=${global.broadcasterId}&first=100`
   + (paginationCursor != null ? `&after=${paginationCursor}` : ''), {
     headers: {
-      'Client-ID': conf.clientId
+      'Client-ID': config.clientId
     }
   })
     .then(res => {
@@ -47,9 +50,9 @@ const fetchFollowers = paginationCursor => new Promise((resolve, reject) => {
 
 
 const update = function () {
-  axios.get(`https://api.twitch.tv/helix/streams?user_login=${conf.broadcasterChannelName}`, {
+  axios.get(`https://api.twitch.tv/helix/streams?user_login=${config.broadcasterChannelName}`, {
     headers: {
-      'Client-ID': conf.clientId
+      'Client-ID': config.clientId
     }
   })
     .then(res => {
@@ -69,7 +72,7 @@ const update = function () {
               fetchFollowers()
                 .then(followersList => {
                   const followers = new Set(followersList)
-                  axios.get(`http://tmi.twitch.tv/group/user/${conf.broadcasterChannelName}/chatters`)
+                  axios.get(`http://tmi.twitch.tv/group/user/${config.broadcasterChannelName}/chatters`)
                     .then(res => res.data && res.data.chatters &&
                       [...res.data.chatters.viewers,
                         ...res.data.chatters.moderators,
@@ -79,7 +82,7 @@ const update = function () {
                         ...res.data.chatters.global_mods].forEach(username => {
                         axios.get(`https://api.twitch.tv/helix/users?login=${username}`, {
                           headers: {
-                            'Client-ID': conf.clientId
+                            'Client-ID': config.clientId
                           }
                         }).then(res => {
                           if (res.data && res.data.data && res.data.data.length > 0) {
@@ -87,8 +90,8 @@ const update = function () {
                             updateViewerPoints(
                               userId,
                               username,
-                              subscribers.has(userId) ? conf.currency.subscriberMultiplier : followers.has(userId)
-                                ? conf.currency.followerMultiplier : 1
+                              subscribers.has(userId) ? config.currency.subscriberMultiplier : followers.has(userId)
+                                ? config.currency.followerMultiplier : 1
                             )
                           }
                         })

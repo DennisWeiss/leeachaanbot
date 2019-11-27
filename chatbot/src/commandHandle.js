@@ -77,7 +77,7 @@ const gamble = (client, target, userId, username, betFraction) => {
       if (user) {
         if (Math.random() >= 0.5) {
           user.points = Math.floor((1 + betFraction) * user.points)
-          client.say(target, `@${username} Herzlichen Glückwunsch! Du hast jetzt ${formatPoints(user.points)}. Versuch es doch gleich nochmal! leeachLove`)
+          client.say(target, `@${username} Herzlichen Glückwunsch! Du hast jetzt ${formatPoints(user.points)}. Versuch es doch gleich nochmal! leeachHeart`)
         } else {
           user.points = Math.floor((1 - betFraction) * user.points)
           client.say(target, `@${username} Oh Nein, du hast leider verloren! Du hast jetzt ${formatPoints(user.points)}. Versuch es doch gleich nochmal! 🤭`)
@@ -114,7 +114,7 @@ const rouletteColorBet = (client, target, userId, username, points, bet) => {
           let msg = `@${username} Es ist eine ${rouletteResult} (${translations[color]}). `
           if (won) {
             user.points += points
-            msg += `Du hast also gewonnen! Du besitzt jetzt ${formatPoints(user.points)}. leeachLove`
+            msg += `Du hast also gewonnen! Du besitzt jetzt ${formatPoints(user.points)}. leeachHeart`
           } else {
             user.points -= points
             msg += `Du hast leider verloren! Du besitzt jetzt ${formatPoints(user.points)}.`
@@ -140,7 +140,7 @@ const rouletteNumber = (client, target, userId, username, points, bet) => {
           let msg = `@${username} Es ist eine ${rouletteResult} (${translations[color]}). `
           if (won) {
             user.points += 35 * points
-            msg += `Du hast also gewonnen! Du besitzt jetzt ${formatPoints(user.points)}. leeachLove`
+            msg += `Du hast also gewonnen! Du besitzt jetzt ${formatPoints(user.points)}. leeachHeart`
           } else {
             user.points -= points
             msg += `Du hast leider verloren! Du besitzt jetzt ${formatPoints(user.points)}.`

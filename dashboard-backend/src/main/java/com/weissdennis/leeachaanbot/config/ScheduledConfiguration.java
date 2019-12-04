@@ -36,7 +36,7 @@ public class ScheduledConfiguration {
         this.configRepository = configRepository;
     }
 
-    @Scheduled(cron = "0 24 20 * * *")
+    @Scheduled(cron = "0 0 4 * * *")
     public void updateUserInfo() {
         LOGGER.info("Executed update of user info at " + Instant.now().toString());
 

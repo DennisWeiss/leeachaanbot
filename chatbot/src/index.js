@@ -84,8 +84,6 @@ Config.findOne({})
       console.log(`* Connected to ${addr}:${port}`)
     }
 
-    fetchCycle.update()
-
     console.log('Updating user points every ' + config.currency.iterationCycleInMs + ' ms')
 
     setInterval(fetchCycle.update, config.currency.iterationCycleInMs)

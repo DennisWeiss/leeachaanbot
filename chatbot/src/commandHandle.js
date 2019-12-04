@@ -1,8 +1,8 @@
 const global = require('./global')
 const User = require('./model/User')
 const Security = require('./model/Security')
+const Config = require('./model/Config')
 const Command = require('./model/CustomCommand')
-const conf = require('./conf/conf')
 const roulette = require('./model/roulette')
 const translations = require('./conf/translations')
 const numeral = require('numeral')
@@ -10,10 +10,14 @@ const axios = require('axios')
 const {fetchUserById} = require('./requests/requests')
 
 
+let config = null
+
+Config.findOne({}).exec((err, _config) => config = _config)
+
 function help(client, target, username) {
   client.say(target, `@${username} Verfügbare Kommandos: !p, !dangos: Sagt dir wieviele 
-  ${conf.currency.namePlural} du besitzt. !leaderboard, !rekord: Schau wer die meisten ${conf.currency.namePlural} gesammelt hat. 
-  !gamble <1-100> Gib an wie viel % deiner ${conf.currency.namePlural} du mit einer 50/50 Chance vergamblen möchtest.`)
+  ${config.currency.namePlural} du besitzt. !leaderboard, !rekord: Schau wer die meisten ${config.currency.namePlural} gesammelt hat. 
+  !gamble <1-100> Gib an wie viel % deiner ${config.currency.namePlural} du mit einer 50/50 Chance vergamblen möchtest.`)
 }
 
 function dangos(client, target, userId, username) {
@@ -21,7 +25,7 @@ function dangos(client, target, userId, username) {
     .exec(function (err, user) {
       const points = user ? user.points : 0
       client.say(target, `@${username} Du hast ${points} ${points === 1 ?
-        conf.currency.nameSingular : conf.currency.namePlural}.`)
+        config.currency.nameSingular : config.currency.namePlural}.`)
     })
 }
 
@@ -106,7 +110,7 @@ const rouletteColorBet = (client, target, userId, username, points, bet) => {
     .exec((err, user) => {
       if (user) {
         if (points > user.points) {
-          client.say(target, `@${username} Du besitzt leider nicht genug ${conf.currency.namePlural}.`)
+          client.say(target, `@${username} Du besitzt leider nicht genug ${config.currency.namePlural}.`)
         } else {
           const rouletteResult = Math.floor(37 * Math.random())
           const color = rouletteColor(rouletteResult)
@@ -132,7 +136,7 @@ const rouletteNumber = (client, target, userId, username, points, bet) => {
     .exec((err, user) => {
       if (user) {
         if (points > user.points) {
-          client.say(target, `@${username} Du besitzt leider nicht genug ${conf.currency.namePlural}.`)
+          client.say(target, `@${username} Du besitzt leider nicht genug ${config.currency.namePlural}.`)
         } else {
           const rouletteResult = Math.floor(37 * Math.random())
           const color = rouletteColor(rouletteResult)
@@ -190,14 +194,14 @@ const bitsLeaderboard = (client, target, userId, username) => {
 }
 
 const donationLeaderboard = (client, target, username) => {
-  axios.get(`https://www.tipeeestream.com/v2.0/users/${conf.broadcasterChannelName}/leaderboard?start=1970-01-01`)
+  axios.get(`https://www.tipeeestream.com/v2.0/users/${config.broadcasterChannelName}/leaderboard?start=1970-01-01`)
     .then(res => {
       if (res.data && res.data.datas && res.data.datas.result) {
         let msg = `@${username} `
         for (let i = 0; i < 5; i++) {
           const resultElement = res.data.datas.result[i.toString()]
           if (resultElement) {
-            msg += `${i + 1}. ${resultElement.username} ${resultElement.amount} ${conf.donationCurrency} - `
+            msg += `${i + 1}. ${resultElement.username} ${resultElement.amount} ${config.donationCurrency} - `
           }
         }
         client.say(target, msg.substr(0, msg.length - 3))
@@ -207,13 +211,13 @@ const donationLeaderboard = (client, target, username) => {
 
 const give = (client, target, userId, username, usernameToGive, pointsToGive) => {
   if (username.toLowerCase() === usernameToGive.toLowerCase()) {
-    client.say(target, `@${username} Du kannst dir doch nicht selber ${conf.currency.namePlural} geben. 🤭`)
+    client.say(target, `@${username} Du kannst dir doch nicht selber ${config.currency.namePlural} geben. 🤭`)
   } else {
     User.findOne({userId})
       .exec((err, user) => {
         if (user) {
           if (pointsToGive > user.points) {
-            client.say(target, `@${username} Du hast leider nicht genug ${conf.currency.namePlural}.`)
+            client.say(target, `@${username} Du hast leider nicht genug ${config.currency.namePlural}.`)
           } else {
             User.findOne({name: usernameToGive.toLowerCase()})
               .exec((err, userToGive) => {
@@ -235,7 +239,7 @@ const give = (client, target, userId, username, usernameToGive, pointsToGive) =>
   }
 }
 
-const formatPoints = points => `${numeral(points).format('0,0')} ${points === 1 ? conf.currency.nameSingular : conf.currency.namePlural}`
+const formatPoints = points => `${numeral(points).format('0,0')} ${points === 1 ? config.currency.nameSingular : config.currency.namePlural}`
 
 function handleCommand(client, target, context, cmd) {
   if (cmd.startsWith('!gamble')) {
@@ -260,24 +264,24 @@ function handleCommand(client, target, context, cmd) {
           if (betAsNumber >= 0 && betAsNumber <= 36) {
             rouletteNumber(client, target, context['user-id'], context.username, points, betAsNumber)
           } else {
-            client.say(target, `@${context.username} !roulette <${conf.currency.namePlural}> <0-36 oder Farbe>`)
+            client.say(target, `@${context.username} !roulette <${config.currency.namePlural}> <0-36 oder Farbe>`)
           }
         }
       }
     } else {
-      client.say(target, `@${context.username} !roulette <${conf.currency.namePlural}> <0-36 oder Farbe>`)
+      client.say(target, `@${context.username} !roulette <${config.currency.namePlural}> <0-36 oder Farbe>`)
     }
   } else if (cmd.startsWith('!give')) {
     const parts = cmd.split(/\s+/)
     if (parts.length !== 3) {
-      client.say(target, `@${context.username} !give <Username> <${conf.currency.namePlural}>`)
+      client.say(target, `@${context.username} !give <Username> <${config.currency.namePlural}>`)
     } else {
       const usernameToGive = parts[1]
       const pointsToGive = parseInt(parts[2])
       if (usernameToGive && pointsToGive && pointsToGive > 0) {
         give(client, target, context['user-id'], context.username, usernameToGive, pointsToGive)
       } else {
-        client.say(target, `@${context.username} !give <Username> <${conf.currency.namePlural}>`)
+        client.say(target, `@${context.username} !give <Username> <${config.currency.namePlural}>`)
       }
     }
   } else {

@@ -1,10 +1,14 @@
 const axios = require('axios')
-const conf = require('../conf/conf')
+const Config = require('../model/Config')
+
+let config = null
+
+Config.findOne({}).exec((err, _config) => config = _config)
 
 
 const fetchUserById = userId => axios.get(`https://api.twitch.tv/helix/users?id=${userId}`, {
   headers: {
-    'Client-ID': conf.clientId
+    'Client-ID': config.clientId
   }
 })
 

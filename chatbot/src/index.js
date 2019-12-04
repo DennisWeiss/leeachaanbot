@@ -28,7 +28,7 @@ Config.findOne({})
         username: config.botUsername,
         password: config.botOAuthPassword
       },
-      channels: [/*config.broadcasterChannelName*/'dennisweiss']
+      channels: [config.broadcasterChannelName]
 
     }
 

@@ -50,12 +50,14 @@ const fetchFollowers = paginationCursor => new Promise((resolve, reject) => {
 
 
 const update = function () {
+  console.log('updating 1')
   axios.get(`https://api.twitch.tv/helix/streams?user_login=${config.broadcasterChannelName}`, {
     headers: {
       'Client-ID': config.clientId
     }
   })
     .then(res => {
+      console.log('updating 2')
       Security.findOne({})
         .exec((err, security) => {
           if (res.data && res.data.data && res.data.data.length > 0) {

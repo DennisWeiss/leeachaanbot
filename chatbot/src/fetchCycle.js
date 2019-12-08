@@ -82,6 +82,7 @@ const update = function () {
                         ...res.data.chatters.staff,
                         ...res.data.chatters.admins,
                         ...res.data.chatters.global_mods].forEach(username => {
+                        console.log('online: ' + username)
                         axios.get(`https://api.twitch.tv/helix/users?login=${username}`, {
                           headers: {
                             'Client-ID': config.clientId
@@ -89,6 +90,7 @@ const update = function () {
                         }).then(res => {
                           if (res.data && res.data.data && res.data.data.length > 0) {
                             const userId = res.data.data[0].id
+                            console.log('user id: ' + userId)
                             updateViewerPoints(
                               userId,
                               username,

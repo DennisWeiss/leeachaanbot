@@ -57,6 +57,7 @@ const update = function () {
     }
   })
     .then(res => {
+      console.log(config.broadcasterChannelName)
       console.log(res.status)
       console.log(res.data)
       console.log('updating 2')

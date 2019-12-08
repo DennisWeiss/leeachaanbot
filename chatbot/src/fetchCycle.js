@@ -60,12 +60,15 @@ const update = function () {
       console.log('updating 2')
       Security.findOne({})
         .exec((err, security) => {
+          console.log('updating 3')
           if (res.data && res.data.data && res.data.data.length > 0) {
+            console.log('updating 4')
             axios.get(`https://api.twitch.tv/helix/subscriptions?broadcaster_id=${global.broadcasterId}`, {
               headers: {
                 'Authorization': `Bearer ${security.accessToken}`
               }
             }).then(res => {
+              console.log('updating 5')
               if (res.status === 401) {
                 global.refreshToken().then(() => update())
               }
@@ -73,6 +76,7 @@ const update = function () {
                 new Set(res.data.data.map(subscription => subscription.user_id)) : new Set()
               fetchFollowers()
                 .then(followersList => {
+                  console.log('updating 6')
                   const followers = new Set(followersList)
                   axios.get(`http://tmi.twitch.tv/group/user/${config.broadcasterChannelName}/chatters`)
                     .then(res => res.data && res.data.chatters &&

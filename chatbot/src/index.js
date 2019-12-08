@@ -86,8 +86,6 @@ Config.findOne({})
 
     console.log('Updating user points every ' + config.currency.iterationCycleInMs + ' ms')
 
-    fetchCycle.update()
-
     setInterval(fetchCycle.update, config.currency.iterationCycleInMs)
 
     const refreshAppAccessTokenAndSubscriptions = () => {

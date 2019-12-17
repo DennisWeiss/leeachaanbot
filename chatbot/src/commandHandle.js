@@ -84,7 +84,7 @@ const gamble = (client, target, userId, username, betFraction) => {
           client.say(target, `@${username} Herzlichen Glückwunsch! Du hast jetzt ${formatPoints(user.points)}. Versuch es doch gleich nochmal! leeachHeart`)
         } else {
           user.points = Math.floor((1 - betFraction) * user.points)
-          client.say(target, `@${username} Oh Nein, du hast leider verloren! Du hast jetzt ${formatPoints(user.points)}. Versuch es doch gleich nochmal! 🤭`)
+          client.say(target, `@${username} Oh Nein, du hast leider verloren! Du hast jetzt ${formatPoints(user.points)}. Versuch es doch gleich nochmal! leeachCry`)
         }
         user.save()
           .then(() => {

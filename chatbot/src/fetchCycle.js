@@ -34,7 +34,8 @@ const fetchFollowers = paginationCursor => new Promise((resolve, reject) => {
   axios.get(`https://api.twitch.tv/helix/users/follows?to_id=${global.broadcasterId}&first=100`
   + (paginationCursor != null ? `&after=${paginationCursor}` : ''), {
     headers: {
-      'Client-ID': config.clientId
+      'Client-ID': config.clientId,
+      Authorization: `Bearer ${appAccessToken}`
     }
   })
     .then(res => {

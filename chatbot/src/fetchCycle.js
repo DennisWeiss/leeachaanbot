@@ -35,7 +35,7 @@ const fetchFollowers = paginationCursor => new Promise((resolve, reject) => {
   + (paginationCursor != null ? `&after=${paginationCursor}` : ''), {
     headers: {
       'Client-ID': config.clientId,
-      Authorization: `Bearer ${appAccessToken}`
+      Authorization: `Bearer ${global.appAccessToken}`
     }
   })
     .then(res => {

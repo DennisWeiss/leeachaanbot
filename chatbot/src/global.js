@@ -53,7 +53,8 @@ const refreshSubscriptions = (broadcasterId, appAccessToken) => {
   console.log('Refreshing subscriptions with token ' + appAccessToken)
   axios.post(`https://api.twitch.tv/helix/webhooks/hub?hub.callback=${conf.hostname}:${conf.port}/follower&hub.mode=subscribe&hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${broadcasterId}&hub.lease_seconds=864000`, null, {
     headers: {
-      Authorization: `Bearer ${appAccessToken}`
+      Authorization: `Bearer ${appAccessToken}`,
+      'Client-ID': config.clientId
     }
   })
     .then(res => {

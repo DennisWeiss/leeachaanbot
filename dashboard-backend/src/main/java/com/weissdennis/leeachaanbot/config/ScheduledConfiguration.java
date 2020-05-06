@@ -36,16 +36,19 @@ public class ScheduledConfiguration {
         this.configRepository = configRepository;
     }
 
-    @Scheduled(cron = "0 0 4 * * *")
+    @Scheduled(cron = "0 46 21 * * *")
     public void updateUserInfo() {
         LOGGER.info("Executed update of user info at " + Instant.now().toString());
 
         HttpHeaders headers = new HttpHeaders();
-        List<Configs> all = configRepository.findAll();
-        headers.set("Client-ID", all.get(0).getClientId());
+        List<Configs> configs = configRepository.findAll();
+        headers.set("Client-ID", configs.get(0).getClientId());
+        headers.set("Authorization", "Bearer " + configs.get(0).getAccessToken());
 
         List<Users> users = userRepository.findAll();
         for (int i = 0; i < users.size(); i++) {
+            LOGGER.info("User " + i);
+
             Users user = users.get(i);
 
             RestTemplate restTemplate = new RestTemplate();

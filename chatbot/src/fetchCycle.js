@@ -63,7 +63,8 @@ const update = function () {
           if (res.data && res.data.stream) {
             axios.get(`https://api.twitch.tv/helix/subscriptions?broadcaster_id=${global.broadcasterId}`, {
               headers: {
-                'Authorization': `Bearer ${security.accessToken}`
+                'Authorization': `Bearer ${security.accessToken}`,
+                'Client-ID': config.clientId
               }
             }).then(res => {
               if (res.status === 401) {
@@ -84,7 +85,8 @@ const update = function () {
                         ...res.data.chatters.global_mods].forEach(username => {
                         axios.get(`https://api.twitch.tv/helix/users?login=${username}`, {
                           headers: {
-                            'Client-ID': config.clientId
+                            'Client-ID': config.clientId,
+                            Authorization: `Bearer ${security.accessToken}`
                           }
                         }).then(res => {
                           if (res.data && res.data.data && res.data.data.length > 0) {

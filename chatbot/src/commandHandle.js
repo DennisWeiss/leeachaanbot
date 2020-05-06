@@ -39,12 +39,13 @@ const leaderboardMessage = (sortedUsers, userId, top = 3, index = 0, userAppeare
       resolve('')
     } else if (sortedUsers[index].userId === userId) {
       fetchUserById(sortedUsers[index].userId).then(res => {
-        const messagePart = leaderboardMessagePart(
-          index,
-          res.data && res.data.data && res.data.data.length > 0 ? res.data.data[0].display_name : '*',
-          sortedUsers[index].points
-        )
-        resolve(messagePart.substr(0, messagePart.length - 3))}
+          const messagePart = leaderboardMessagePart(
+            index,
+            res.data && res.data.data && res.data.data.length > 0 ? res.data.data[0].display_name : '*',
+            sortedUsers[index].points
+          )
+          resolve(messagePart.substr(0, messagePart.length - 3))
+        }
       )
     } else {
       leaderboardMessage(sortedUsers, userId, top, index + 1, userAppeared).then(resolve)
@@ -166,7 +167,8 @@ const bitsLeaderboard = (client, target, userId, username) => {
     .exec((err, security) => {
       axios.get('https://api.twitch.tv/helix/bits/leaderboard', {
         headers: {
-          Authorization: `Bearer ${security.accessToken}`
+          Authorization: `Bearer ${security.accessToken}`,
+          'Client-ID': config.clientId
         }
       })
         .then(res => {

@@ -57,16 +57,6 @@ Config.findOne({})
         }
       })
 
-    axios.get(`https://api.twitch.tv/helix/users?login=${config.broadcasterChannelName}`, {
-      headers: {
-        'Client-ID': config.clientId
-      }
-    }).then(res => {
-      if (res.data && res.data.data && res.data.data.length > 0) {
-        global.broadcasterId = res.data.data[0].id
-      }
-    })
-
     // Called every time a message comes in
     function onMessageHandler(target, context, msg, self) {
       if (self) {
@@ -88,10 +78,26 @@ Config.findOne({})
 
     setInterval(fetchCycle.update, config.currency.iterationCycleInMs)
 
+    const loadBroadcasterId = () => {
+      axios.get(`https://api.twitch.tv/helix/users?login=${config.broadcasterChannelName}`, {
+        headers: {
+          Authorization: `Bearer ${global.accessToken}`,
+          'Client-ID': config.clientId
+        }
+      })
+        .then(res => {
+          if (res.data && res.data.data && res.data.data.length > 0) {
+            global.broadcasterId = res.data.data[0].id
+          }
+        })
+        .catch(console.error)
+    }
+
     const refreshAppAccessTokenAndSubscriptions = () => {
       global.refreshAppAccessToken().then(appAccessToken => {
         global.appAccessToken = appAccessToken
         global.refreshSubscriptions(global.broadcasterId, appAccessToken)
+        loadBroadcasterId()
         setTimeout(refreshAppAccessTokenAndSubscriptions, 24 * 60 * 60 * 1000)
       })
         .catch(err => setTimeout(refreshAppAccessTokenAndSubscriptions, 24 * 60 * 60 * 1000))
@@ -99,6 +105,3 @@ Config.findOne({})
 
     refreshAppAccessTokenAndSubscriptions()
   })
-
-
-

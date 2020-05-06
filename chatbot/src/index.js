@@ -88,6 +88,7 @@ Config.findOne({})
         .then(res => {
           if (res.data && res.data.data && res.data.data.length > 0) {
             global.broadcasterId = res.data.data[0].id
+            resolve(global.broadcasterId)
           }
         })
         .catch(err => {

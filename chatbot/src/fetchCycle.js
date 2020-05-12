@@ -11,20 +11,37 @@ Config.findOne({}).exec((err, _config) => config = _config)
 
 const userExcluded = username => [config.broadcasterChannelName, config.botUsername, ...config.excludedUsers].includes(username)
 
-const updateViewerPoints = function (userId, username, multiplier = 1) {
+const updateViewerPoints = (userId, username, multiplier = 1) => {
   if (!userExcluded(username)) {
     User.findOne({userId})
-      .exec(function (err, user) {
+      .exec((err, user) => {
         if (user) {
           User.findOneAndUpdate({userId}, {
-            name: user.name, points: user.points + multiplier * config.currency.pointsPerViewIteration
+            name: user.name,
+            points: user.points + multiplier * config.currency.pointsPerViewIteration
           })
-            .exec(function (err, user) {
-            })
+            .exec((err, user) => {})
         } else {
           const user = new User({userId, name: username, points: multiplier * config.currency.pointsPerViewIteration})
-          user.save().then(() => {
+          user.save().then(() => {})
+        }
+      })
+  }
+}
+
+const updateWatchTime = (userId, username, watchTime) => {
+  if (!userExcluded(username)) {
+    User.findOne({userId})
+      .exec((err, user) => {
+        if (user) {
+          User.findOneAndUpdate({userId}, {
+            name: user.name,
+            watchTimeInS: (user.watchTimeInS != null ? user.watchTimeInS : 0) + watchTime
           })
+            .exec((err, user) => {})
+        } else {
+          const user = new User({userId, name: username, watchTimeInS: watchTime})
+          user.save().then(() => {})
         }
       })
   }
@@ -32,7 +49,7 @@ const updateViewerPoints = function (userId, username, multiplier = 1) {
 
 const fetchFollowers = paginationCursor => new Promise((resolve, reject) => {
   axios.get(`https://api.twitch.tv/helix/users/follows?to_id=${global.broadcasterId}&first=100`
-  + (paginationCursor != null ? `&after=${paginationCursor}` : ''), {
+    + (paginationCursor != null ? `&after=${paginationCursor}` : ''), {
     headers: {
       'Client-ID': config.clientId,
       Authorization: `Bearer ${global.appAccessToken}`
@@ -50,7 +67,7 @@ const fetchFollowers = paginationCursor => new Promise((resolve, reject) => {
 })
 
 
-const update = function () {
+const update = () => {
   axios.get(`https://api.twitch.tv/kraken/streams/${global.broadcasterId}`, {
     headers: {
       'Client-ID': config.clientId,
@@ -58,55 +75,63 @@ const update = function () {
     }
   })
     .then(res => {
-      Security.findOne({})
-        .exec((err, security) => {
-          if (res.data && res.data.stream) {
-            axios.get(`https://api.twitch.tv/helix/subscriptions?broadcaster_id=${global.broadcasterId}`, {
-              headers: {
-                'Authorization': `Bearer ${security.accessToken}`,
-                'Client-ID': config.clientId
-              }
-            }).then(res => {
-              if (res.status === 401) {
-                global.refreshToken().then(() => update())
-              }
-              const subscribers = res.data && res.data.data ?
-                new Set(res.data.data.map(subscription => subscription.user_id)) : new Set()
-              fetchFollowers()
-                .then(followersList => {
-                  const followers = new Set(followersList)
-                  axios.get(`http://tmi.twitch.tv/group/user/${config.broadcasterChannelName}/chatters`)
-                    .then(res => res.data && res.data.chatters &&
-                      [...res.data.chatters.viewers,
-                        ...res.data.chatters.moderators,
-                        ...res.data.chatters.vips,
-                        ...res.data.chatters.staff,
-                        ...res.data.chatters.admins,
-                        ...res.data.chatters.global_mods].forEach(username => {
-                        axios.get(`https://api.twitch.tv/helix/users?login=${username}`, {
-                          headers: {
-                            'Client-ID': config.clientId,
-                            Authorization: `Bearer ${security.accessToken}`
-                          }
-                        }).then(res => {
-                          if (res.data && res.data.data && res.data.data.length > 0) {
-                            const userId = res.data.data[0].id
-                            updateViewerPoints(
-                              userId,
-                              username,
-                              subscribers.has(userId) ? config.currency.subscriberMultiplier : followers.has(userId)
-                                ? config.currency.followerMultiplier : 1
-                            )
-                          }
-                        })
-                      }))
+      Config.findOne({})
+        .exec((err, config) => {
+          Security.findOne({})
+            .exec((err, security) => {
+              if (res.data && res.data.stream) {
+                axios.get(`https://api.twitch.tv/helix/subscriptions?broadcaster_id=${global.broadcasterId}`, {
+                  headers: {
+                    'Authorization': `Bearer ${security.accessToken}`,
+                    'Client-ID': config.clientId
+                  }
+                }).then(res => {
+                  if (res.status === 401) {
+                    global.refreshToken().then(() => update())
+                  }
+                  const subscribers = res.data && res.data.data ?
+                    new Set(res.data.data.map(subscription => subscription.user_id)) : new Set()
+                  fetchFollowers()
+                    .then(followersList => {
+                      const followers = new Set(followersList)
+                      axios.get(`http://tmi.twitch.tv/group/user/${config.broadcasterChannelName}/chatters`)
+                        .then(res => res.data && res.data.chatters &&
+                          [...res.data.chatters.viewers,
+                            ...res.data.chatters.moderators,
+                            ...res.data.chatters.vips,
+                            ...res.data.chatters.staff,
+                            ...res.data.chatters.admins,
+                            ...res.data.chatters.global_mods].forEach(username => {
+                            axios.get(`https://api.twitch.tv/helix/users?login=${username}`, {
+                              headers: {
+                                'Client-ID': config.clientId,
+                                Authorization: `Bearer ${security.accessToken}`
+                              }
+                            }).then(res => {
+                              if (res.data && res.data.data && res.data.data.length > 0) {
+                                const userId = res.data.data[0].id
+                                updateViewerPoints(
+                                  userId,
+                                  username,
+                                  subscribers.has(userId) ? config.currency.subscriberMultiplier : followers.has(userId)
+                                    ? config.currency.followerMultiplier : 1
+                                )
+                                updateWatchTime(
+                                  userId,
+                                  username,
+                                  config.iterationCycleInMs / 1000
+                                )
+                              }
+                            })
+                          }))
+                    })
                 })
+                  .catch(err => {
+                    console.log('error')
+                    global.refreshToken().then(() => update())
+                  })
+              }
             })
-              .catch(err => {
-                console.log('error')
-                global.refreshToken().then(() => update())
-              })
-          }
         })
     })
 

@@ -6,7 +6,8 @@ const User = mongoose.model('User', {
   name: String,
   displayName: String,
   profilePictureUrl: String,
-  points: Number
+  points: Number,
+  watchTimeInS: Number
 })
 
 module.exports = User

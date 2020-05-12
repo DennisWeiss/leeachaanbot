@@ -20,7 +20,7 @@ function help(client, target, username) {
   !gamble <1-100> Gib an wie viel % deiner ${config.currency.namePlural} du mit einer 50/50 Chance vergamblen möchtest.`)
 }
 
-function dangos(client, target, userId, username) {
+function points(client, target, userId, username) {
   User.findOne({userId})
     .exec(function (err, user) {
       const points = user ? user.points : 0
@@ -213,6 +213,21 @@ const donationLeaderboard = (client, target, username) => {
     })
 }
 
+const watchTime = (client, target, userId, username) => {
+  User.findOne({userId})
+    .exec((err, user) => {
+      client.say(target, `@${username} Du hast insgesamt ${
+        formatDuration(user != null && user.watchTimeInS != null ? user.watchTimeInS : 0)
+      } zugeschaut.`)
+    })
+}
+
+const formatDuration = timeInSeconds => {
+  let hours = Math.floor(timeInSeconds / 3600)
+  let minutes = Math.floor(timeInSeconds / 60)
+  return `${hours > 0 ? hours + 'h' : ''}${minutes}min`
+}
+
 const give = (client, target, userId, username, usernameToGive, pointsToGive) => {
   if (username.toLowerCase() === usernameToGive.toLowerCase()) {
     client.say(target, `@${username} Du kannst dir doch nicht selber ${config.currency.namePlural} geben. 🤭`)
@@ -302,10 +317,7 @@ function handleCommand(client, target, context, cmd) {
 
     switch (cmd) {
       case '!p':
-        dangos(client, target, context['user-id'], context.username)
-        break
-      case '!dangos':
-        dangos(client, target, context['user-id'], context.username)
+        points(client, target, context['user-id'], context.username)
         break
       case '!leaderboard':
         leaderboard(client, target, context['user-id'], context.username)
@@ -318,6 +330,9 @@ function handleCommand(client, target, context, cmd) {
         break
       case '!donations':
         donationLeaderboard(client, target, context.username)
+        break
+      case '!watchtime':
+        watchTime(client, target, context['user-id'], context.username)
         break
       case '!h':
         help(client, target, context.username)

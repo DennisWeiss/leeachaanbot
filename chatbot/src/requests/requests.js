@@ -10,7 +10,7 @@ const fetchUserById = userId => new Promise((resolve, reject) => {
       axios.get(`https://api.twitch.tv/helix/users?id=${userId}`, {
         headers: {
           'Client-ID': config.clientId,
-          Authorization: `Bearer ${security.appAccessToken}`
+          Authorization: `Bearer ${security.accessToken}`
         }
       })
         .then(resolve)

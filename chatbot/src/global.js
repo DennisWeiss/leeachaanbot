@@ -41,7 +41,11 @@ const refreshAppAccessToken = () => new Promise((resolve, reject) => {
   axios.post(`https://id.twitch.tv/oauth2/token?client_id=${config.clientId}&client_secret=${config.clientSecret}&grant_type=client_credentials&scope=bits:read+channel:read:subscriptions+channel_subscriptions`)
     .then(res => {
       if (res.data) {
-        resolve(res.data.access_token)
+        Security.findOne({})
+          .exec((err, security) => {
+            security.accessToken = res.data.access_token
+            security.save().then(_security => resolve(_security.accessToken))
+          })
       } else {
         reject()
       }

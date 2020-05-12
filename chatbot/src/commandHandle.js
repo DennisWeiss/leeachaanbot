@@ -51,18 +51,20 @@ const leaderboardMessage = (sortedUsers, userId, top = 3, index = 0, userAppeare
       leaderboardMessage(sortedUsers, userId, top, index + 1, userAppeared).then(resolve)
     }
   } else {
-    fetchUserById(sortedUsers[index].userId).then(res => {
-      const messagePart = leaderboardMessagePart(
-        index,
-        res.data && res.data.data && res.data.data.length > 0 ? res.data.data[0].display_name : '*',
-        sortedUsers[index].points
-      )
-      leaderboardMessage(sortedUsers, userId, top - 1, index + 1,
-        userAppeared || sortedUsers[index].userId === userId)
-        .then(msg => resolve(
-          messagePart.substr(0, messagePart.length - (userAppeared && top === 1 ? 3 : 0)) + msg
-        ))
-    })
+    fetchUserById(sortedUsers[index].userId)
+      .then(res => {
+        const messagePart = leaderboardMessagePart(
+          index,
+          res.data && res.data.data && res.data.data.length > 0 ? res.data.data[0].display_name : '*',
+          sortedUsers[index].points
+        )
+        leaderboardMessage(sortedUsers, userId, top - 1, index + 1,
+          userAppeared || sortedUsers[index].userId === userId)
+          .then(msg => resolve(
+            messagePart.substr(0, messagePart.length - (userAppeared && top === 1 ? 3 : 0)) + msg
+          ))
+      })
+      .catch(console.error)
   }
 })
 
